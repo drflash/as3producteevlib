@@ -41,6 +41,8 @@ package com.producteev.webapis.methodgroups
 				var e:ProducteevResultEvent = new ProducteevResultEvent(ProducteevResultEvent.USERS_LOGIN);
 				e.success = false;
 				e.data = "Wrong credentials";
+				
+				dispatchEvent(e);
 			}
 			else
 			{
