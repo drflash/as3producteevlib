@@ -32,8 +32,10 @@ package com.producteev.webapis.methodgroups
 											  propertyName:String):void
 		{
 			var event:ProducteevResultEvent = new ProducteevResultEvent(responseConstant);
-			event.data = _resultParser.process(response, responseConstant, parseFunction,
-											 	propertyName).data;
+			var result:Object = _resultParser.process(response, responseConstant, parseFunction, propertyName);
+			
+			event.success = result.success;
+			event.data = result.data;
 
 			dispatchEvent(event);
 		}

@@ -2,11 +2,14 @@ package com.producteev.webapis.methodgroups
 {
 	import com.adobe.serialization.json.JSONDecoder;
 	import com.producteev.webapis.AuthResult;
+	import com.producteev.webapis.ProducteevError;
 	import com.producteev.webapis.client.ProducteevService;
 	import com.producteev.webapis.events.ProducteevResultEvent;
 	
 	import flash.xml.XMLDocument;
 	import flash.xml.XMLNode;
+	
+	import mx.messaging.Producer;
 
 	public class ResponseParser
 	{
@@ -34,8 +37,28 @@ package com.producteev.webapis.methodgroups
 			// Get the root rsp node from the document
 			var rsp:XMLNode = doc.firstChild;
 			
-			result.data[propertyName] = parseFunction(XML(rsp));
 			
+			if (rsp.firstChild.nodeName == "error" ) 
+				return processError(result, XML(rsp.firstChild));
+			else
+				return processResult(result, parseFunction, propertyName, XML(rsp));
+		}
+		
+		private function processError(result:Object, rsp:XML):Object
+		{
+			result.success = false;
+			
+			var error:ProducteevError = new ProducteevError();
+			error.message = rsp.@message;
+			result.data.error = error;
+			
+			return result;
+		}
+		
+		private function processResult(result:Object, parseFunction:Function, propertyName:String, rsp:XML):Object
+		{
+			result.data[propertyName] = parseFunction(XML(rsp));
+			result.success = true;
 			return result;
 		}
 		
