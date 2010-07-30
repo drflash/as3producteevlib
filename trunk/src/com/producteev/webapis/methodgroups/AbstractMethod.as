@@ -1,7 +1,6 @@
 package com.producteev.webapis.methodgroups
 {
 	import com.producteev.webapis.client.ProducteevService;
-	import com.producteev.webapis.events.ProducteevFaultEvent;
 	import com.producteev.webapis.events.ProducteevResultEvent;
 	
 	import flash.events.EventDispatcher;
