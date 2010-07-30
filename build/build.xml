@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+
+<project name="as3producteevlib" basedir="../" default="compile">
+
+	
+	<property file="${basedir}/build/build.properties"/>
+
+	<!-- path to the flex task libraries. -->
+	<path id="flextasks.classpath">
+		<fileset dir="${FLEX_HOME}/ant/lib">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+	
+	<typedef resource="flexTasks.tasks" classpathref="flextasks.classpath" />
+	
+	
+        <!--
+                Compile all of the classes under the "src" tree into a .swc file
+        -->
+		<target name="compile" description="Compile the SWC file">  
+	         <compc output="${bin.dir}/${library.name}.swc">  
+	         	<compiler.library-path dir="${libs.dir}" append="true">
+					<include name="*.swc"/>
+				</compiler.library-path>
+	             <include-sources dir="${src.dir}" includes="*" />  
+	         </compc>  
+	         <echo>SWC created successfully</echo>  
+	    </target>  
+     
+
+
+
+</project>
+
