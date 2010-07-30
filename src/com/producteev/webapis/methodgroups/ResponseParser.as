@@ -3,9 +3,6 @@ package com.producteev.webapis.methodgroups
 	import com.adobe.serialization.json.JSONDecoder;
 	import com.producteev.webapis.AuthResult;
 	import com.producteev.webapis.ProducteevError;
-	import com.producteev.webapis.client.ProducteevService;
-	import com.producteev.webapis.events.ProducteevResultEvent;
-	
 	import flash.xml.XMLDocument;
 	import flash.xml.XMLNode;
 	
