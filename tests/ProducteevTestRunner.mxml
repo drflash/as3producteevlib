@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	layout="absolute" 
+	minWidth="955" minHeight="600" 
+	xmlns:adobe="http://www.adobe.com/2009/flexUnitUIRunner"
+	creationComplete="test()"
+	>
+	
+	<mx:Script>
+		<![CDATA[
+			import com.producteev.webapis.ProducteevTestSuite;
+			
+			import org.flexunit.listeners.UIListener;
+			import org.flexunit.runner.FlexUnitCore;
+			
+			private function test():void
+			{
+				var core:FlexUnitCore = new FlexUnitCore();
+				core.addListener(new UIListener(testRunner));
+				core.run(ProducteevTestSuite);
+			}
+			
+		]]>
+	</mx:Script>
+		
+	
+	
+	<adobe:TestRunnerBase id="testRunner"
+						  width="100%"
+						  height="100%"
+						  />
+								
+	
+</mx:Application>
