@@ -14,20 +14,94 @@
 	
 	<typedef resource="flexTasks.tasks" classpathref="flextasks.classpath" />
 	
+	<!--
+        Compile the unit tests for the library, placing the test runner .swf file
+        in the bin directory.
+    -->
+
+	<target name="compileTests">
+		<mxmlc file="${tests.dir}/${testRunner.name}.mxml" 
+			   output="${bin.dir}/${testRunner.name}.swf"
+			   incremental="true">
+		
+			<compiler.library-path dir="${libs.dir}" append="true">
+				<include name="*.swc"/>
+			</compiler.library-path>
+			
+			<source-path path-element="${src.dir}"/>
+			<source-path path-element="${tests.dir}"/>
+
+        </mxmlc>
+    </target>
 	
+	<!--
+        Runs the unit tests for the library in the stand-alone Flash Player
+    -->
+    <target name="test" depends="compileTests">
         <!--
-                Compile all of the classes under the "src" tree into a .swc file
+            If/When we add support for determinig the status of unit tests
+            as part of the ANT build process, we need to change the spawn to
+            "no" so that ANT waits until the test runner closes before
+            proceeding.
         -->
-		<target name="compile" description="Compile the SWC file">  
-	         <compc output="${bin.dir}/${library.name}.swc">  
-	         	<compiler.library-path dir="${libs.dir}" append="true">
-					<include name="*.swc"/>
-				</compiler.library-path>
-	             <include-sources dir="${src.dir}" includes="*" />  
-	         </compc>  
-	         <echo>SWC created successfully</echo>  
-	    </target>  
-     
+        <exec executable="${flashDebugPlayer.exe}" spawn="yes">
+                <arg line="${bin.dir}/${testRunner.name}.swf" />
+        </exec>
+    	<echo>Unit Tests OK</echo>
+    </target>
+
+
+	
+    <!--
+        Compile all of the classes under the "src" tree into a .swc file
+    -->
+	<target name="compile" description="Compile the SWC file">  
+         <compc output="${bin.dir}/${library.name}.swc">  
+         	<compiler.library-path dir="${libs.dir}" append="true">
+				<include name="*.swc"/>
+			</compiler.library-path>
+             <include-sources dir="${src.dir}" includes="*" />  
+         </compc>  
+         <echo>SWC created successfully</echo>  
+    </target>  
+ 
+
+	<!--
+        Generate ASDoc output for the library
+    -->
+	<target name="documentation">
+		<exec executable="${flex.asdoc}">
+
+			<arg value="-source-path"/>
+			<arg path="${src.dir}/"/>
+			<arg value="-doc-sources"/>
+			<arg path="${src.dir}/"/>
+
+			<arg value="-output"/>
+			<arg path="${docs.dir}"/>
+
+			<arg value="-main-title"/>
+			<arg path="${library.name} Documentation"/>
+
+			<arg value="-external-library-path"/>
+			<arg path="${libs.dir}"/>
+		</exec>
+		<echo>Documentation created successfully</echo>
+	</target>
+	
+	<!--
+        Generate a distribution based on the current source code.  Includes
+        the source code, the documentation, the examples, and the binary .swc file.
+    -->
+    <target name="zip" depends="compile,test,documentation">
+        <zip destfile="${bin.dir}/${library.name}.zip">
+        	<fileset dir="${basedir}">
+            	<include name="bin/${library.name}.swc" />
+            	<include name="src/**" />
+            	<include name="docs/**" />
+            </fileset>
+        </zip>
+    </target>
 
 
 
