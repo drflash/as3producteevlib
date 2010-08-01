@@ -12,17 +12,27 @@ package com.producteev.webapis.methodgroups
 	public class MethodCaller
 	{
 		
+		/**
+		 * Reusable method that the "method group" classes can call to invoke a
+		 * method on the API.
+		 *
+		 * @param The service containing the API credentials
+		 * @param methodName The name of the method to invoke
+		 * @param callBack The function to be notified when the RPC is complete
+		 * @param params An array of NameValuePair or primitive elements to pass
+		 *			as parameters to the remote method
+		 */
 		public function call(service:ProducteevService, 
 							 methodName:String,
 							 callback:Function,
 							 parameters:Array):void
 		{
-			addKeyAndTokenToParameters(parameters, service.apiKey, service.token);
+			var parameters:Array = addKeyAndTokenToParameters(parameters, service.apiKey, service.token);
 			addMD5SignatureToParameters(parameters, service.apiSecret);
 			callMethod(service, methodName, constructQuery(parameters), callback);
 		}
 		
-		private function addKeyAndTokenToParameters(parameters:Array, apiKey:String, token:String):void
+		private function addKeyAndTokenToParameters(parameters:Array, apiKey:String, token:String):Array
 		{
 			if (!parameters)
 				parameters = new Array();
@@ -31,6 +41,8 @@ package com.producteev.webapis.methodgroups
 			
 			if (token)
 				parameters.push(new NameValuePair("token", token));
+			
+			return parameters;
 			
 		}
 			

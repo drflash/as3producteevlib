@@ -1,17 +1,29 @@
 package com.producteev.webapis.methodgroups
 {
 	import com.adobe.serialization.json.JSONDecoder;
+	import com.adobe.utils.DateUtil;
 	import com.producteev.webapis.AuthResult;
 	import com.producteev.webapis.ProducteevError;
+	import com.producteev.webapis.User;
+	
 	import flash.xml.XMLDocument;
 	import flash.xml.XMLNode;
 	
 	import mx.messaging.Producer;
 
+	/**
+	 * Parse an XML returned by Producteev after a method call.
+	 */ 
 	public class ResponseParser
 	{
+		/**
+		 * Parse an XML and returns the parsed result to the method group caller
+		 * 
+		 * @param The XML response we got from the loader call
+		 * @parseFunction The function to parse the response XML with 
+		 * @propertName The property in event.data that the results should be placed
+		 */
 		public function process(response:String,
-								responseConstant:String,
 								parseFunction:Function,
 								propertyName:String):Object
 		{
@@ -21,6 +33,14 @@ package com.producteev.webapis.methodgroups
 			return res;
 		}
 		
+		/**
+		 * Reusable method that the "method group" classes can call
+		 * to process the results of the Producteev method.
+		 *
+		 * @param The XML response we got from the loader call
+		 * @param parseFunction The function to parse the response XML with
+		 * @param propertyName The property in event.data that the results should be placed
+		 */
 		private function processResponse(response:String, parseFunction:Function, propertyName:String):Object
 		{
 			var result:Object = new Object();
@@ -35,7 +55,7 @@ package com.producteev.webapis.methodgroups
 			var rsp:XMLNode = doc.firstChild;
 			
 			
-			if (rsp.firstChild.nodeName == "error" ) 
+			if (rsp.firstChild && rsp.firstChild.nodeName == "error" ) 
 				return processError(result, XML(rsp.firstChild));
 			else
 				return processResult(result, parseFunction, propertyName, XML(rsp));
@@ -59,6 +79,9 @@ package com.producteev.webapis.methodgroups
 			return result;
 		}
 		
+		/**
+		 * Converts an auth result XML object into an AuthResult instance
+		 */
 		public function parseLogin(response:XML):AuthResult
 		{
 			var auth:AuthResult = new AuthResult();
@@ -70,7 +93,50 @@ package com.producteev.webapis.methodgroups
 		
 		public function parseSignup(response:XML):Object
 		{
-			return null;
+			return null
+		}
+		
+		/**
+		 * Converts an user result XML object into an User instance
+		 */
+		public function parseView(response:XML):Object
+		{
+			var user:User = new User();
+			user.time_signup = DateUtil.parseRFC822(response.@time_signup);
+			user.avatar = response.@avatar;
+			user.company = response.@company;
+			user.default_dashboard = response.@default_dashboard;
+			user.deleted = response.@deleted;
+			user.email = response.@email;
+			user.facebook_id = response.@facebook_id;
+			user.firstName = response.@firstName;
+			user.id_user = response.@id_user;
+			user.lang = response.@lang;
+			user.lastName = response.@lastName;
+			user.sort_by = response.@sort_by;
+			user.timezone = response.@timezone;
+			
+			for each (var u:XML in response.colleagues.user ) 
+			{
+				var colleague:User = new User();
+				colleague.time_signup = DateUtil.parseRFC822(u.@time_signup);
+				colleague.avatar = u.@avatar;
+				colleague.company = u.@company;
+				colleague.default_dashboard = u.@default_dashboard;
+				colleague.deleted = u.@deleted;
+				colleague.email = u.@email;
+				colleague.facebook_id = u.@facebook_id;
+				colleague.firstName = u.@firstName;
+				colleague.id_user = u.@id_user;
+				colleague.lang = u.@lang;
+				colleague.lastName = u.@lastName;
+				colleague.sort_by = u.@sort_by;
+				colleague.timezone = u.@timezone;
+				
+				user.addColleague(colleague);
+			}
+			
+			return user;
 		}
 	}
 }

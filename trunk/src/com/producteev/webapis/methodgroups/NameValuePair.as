@@ -1,9 +1,13 @@
 package com.producteev.webapis.methodgroups
 {
+	/**
+	 * NameValuePair is an object containing a key/value
+	 * combination.
+	 */
 	public class NameValuePair
 	{
 		private var _name:String;
-		private var _value:String;
+		private var _value:*;
 		
 		public function NameValuePair(name:String, value:*)
 		{

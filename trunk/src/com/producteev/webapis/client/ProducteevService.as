@@ -13,6 +13,9 @@ package com.producteev.webapis.client
 	import flash.events.ProgressEvent;
 	import flash.net.URLLoader;
 
+	/**
+	 * The Producteev class abstracts the Producteev API 
+	 */
 	public class ProducteevService extends URLLoaderBase
 	{
 		public static const END_POINT:String = "https://api.producteev.com/";
@@ -37,7 +40,9 @@ package com.producteev.webapis.client
 		}
 		
 		
-
+		/**
+		 * API key that should be used to access the Producteev service.
+		 */
 		public function get apiKey():String
 		{
 			return _apiKey;
@@ -48,6 +53,9 @@ package com.producteev.webapis.client
 			_apiKey = value;
 		}
 
+		/**
+		 * API secret that should be used to access the Producteev service.
+		 */
 		public function get apiSecret():String
 		{
 			return _apiSecret;
@@ -64,6 +72,11 @@ package com.producteev.webapis.client
 			return loader;	
 		}
 
+		/**
+		 * token received after a successfull login
+		 * note that the token is not automatically setted after a login
+		 * the developer should set it
+		 */
 		public function get token():String
 		{
 			return _token;
@@ -74,11 +87,17 @@ package com.producteev.webapis.client
 			_token = value;
 		}
 
+		/**
+		 * Provide read-only access to the Users method group in the Producteev API
+		 */
 		public function get users():Users
 		{
 			return _users;
 		}
 		
+		/**
+		 * Dispatch an error if a method calls trigger an IOErrorEvent
+		 **/
 		public function dispatchError(event:IOErrorEvent):void
 		{
 			var e:ProducteevFaultEvent = new ProducteevFaultEvent(ProducteevFaultEvent.FAULT);
