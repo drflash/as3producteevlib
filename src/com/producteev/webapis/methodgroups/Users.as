@@ -10,18 +10,57 @@ package com.producteev.webapis.methodgroups
 	import flash.events.IOErrorEvent;
 	import flash.net.URLLoader;
 	import flash.net.getClassByAlias;
-
+	
+	/**
+	 * Broadcast as a result of the login method being called
+	 *
+	 * The event contains the following properties
+	 *	success	- Boolean indicating if the call was successful or not
+	 *	data - When success is true, contains an "users" AuthResult instance
+	 *		   When success is false, contains an "error" ProducteevError instance
+	 *
+	 * @see com.producteev.webapis.ProducteevError
+	 */
+	[Event(name="usersLogin", type="com.producteev.webapis.events.ProducteevResultEvent")]
+	
+	
+	/**
+	 * Broadcast as a result of the view method being called
+	 *
+	 * The event contains the following properties
+	 *	success	- Boolean indicating if the call was successful or not
+	 *	data - When success is true, contains an "users" User instance
+	 *		   When success is false, contains an "error" ProducteevError instance
+	 *
+	 * @see com.producteev.webapis.ProducteevError
+	 */
+	[Event(name="usersView", type="com.producteev.webapis.events.ProducteevResultEvent")]
+	
+	/**
+	 * Contains the methods for the User method group in the Producteev API.
+	 */
 	public class Users extends AbstractMethod
 	{
 		private static const PRE:String = "users/";
+		
 		private static const LOGIN:String = "login";
 		private static const SIGNUP:String = "signup";
+		private static const VIEW:String = "view";
 		
-		public function Users(service:ProducteevService, methodCaller:MethodCaller, resultParser:ResponseParser)
+		public function Users(service:ProducteevService, methodCaller:MethodCaller, 
+							  resultParser:ResponseParser)
 		{
 			super(service, methodCaller, resultParser);
 		}
 		
+		/**
+		 * Sign in an user using producteev credentials 
+		 *
+		 * @param email
+		 * @param password
+		 * 
+		 * @see http://code.google.com/p/producteev-api/wiki/methodsDescriptions#users/login
+		 */
 		public function login(email:String, password:String):void
 		{
 			call(PRE+LOGIN,
@@ -55,7 +94,19 @@ package com.producteev.webapis.methodgroups
 			
 		}
 		
-		public function signup(email:String, firstName:String, lastName:String, password:String, fbuid:Number=-1):void
+		/**
+		 * Signup an new user  
+		 *
+		 * @param email
+		 * @param firstName
+		 * @param lastName
+		 * @param password
+		 * @param fbuid Facebook UID
+		 * 
+		 * @see http://code.google.com/p/producteev-api/wiki/methodsDescriptions#users/signup
+		 */
+		public function signup(email:String, firstName:String, lastName:String, 
+							   password:String, fbuid:Number=-1):void
 		{
 			var params:Array = new Array();
 			params.push(new NameValuePair("email", email));
@@ -77,6 +128,36 @@ package com.producteev.webapis.methodgroups
 			processAndDispatch(URLLoader(event.target).data,
 				ProducteevResultEvent.USERS_SIGNUP,
 				_resultParser.parseSignup,
+				"users");
+		}
+		
+		
+		/**
+		 * Get a user 
+		 *
+		 * @param id_colleague (optional) an user can only see information about another user who is on the same 
+		 * @param password
+		 * 
+		 * @see http://code.google.com/p/producteev-api/wiki/methodsDescriptions#users/view
+		 */
+		public function view(id_colleague:int = -1):void
+		{
+			if (id_colleague > -1)
+				call(PRE+VIEW,
+					viewHandler,
+					[new NameValuePair("id_colleague", id_colleague)]
+					);
+			else
+				call(PRE+VIEW,
+					viewHandler,
+					null);
+		}
+		
+		private function viewHandler(event:Event):void
+		{
+			processAndDispatch(URLLoader(event.target).data,
+				ProducteevResultEvent.USERS_VIEW,
+				_resultParser.parseView,
 				"users");
 		}
 	}
