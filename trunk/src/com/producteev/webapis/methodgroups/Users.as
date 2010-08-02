@@ -37,6 +37,31 @@ package com.producteev.webapis.methodgroups
 	[Event(name="usersView", type="com.producteev.webapis.events.ProducteevResultEvent")]
 	
 	/**
+	 * Broadcast as a result of the colleagues method being called
+	 *
+	 * The event contains the following properties
+	 *	success	- Boolean indicating if the call was successful or not
+	 *	data - When success is true, contains an "users" Array of users instance
+	 *		   When success is false, contains an "error" ProducteevError instance
+	 *
+	 * @see com.producteev.webapis.ProducteevError
+	 */
+	[Event(name="usersColleagues", type="com.producteev.webapis.events.ProducteevResultEvent")]
+	
+	/**
+	 * Broadcast as a result of the set default dashboard method being called
+	 *
+	 * The event contains the following properties
+	 *	success	- Boolean indicating if the call was successful or not
+	 *	data - When success is true, contains an "users" User instance
+	 *		   When success is false, contains an "error" ProducteevError instance
+	 *
+	 * @see com.producteev.webapis.ProducteevError
+	 */
+	[Event(name="usersSetDefaultDashboard", type="com.producteev.webapis.events.ProducteevResultEvent")]
+	
+	
+	/**
 	 * Contains the methods for the User method group in the Producteev API.
 	 */
 	public class Users extends AbstractMethod
@@ -46,6 +71,8 @@ package com.producteev.webapis.methodgroups
 		private static const LOGIN:String = "login";
 		private static const SIGNUP:String = "signup";
 		private static const VIEW:String = "view";
+		private static const COLLEAGUES:String = "colleagues";
+		private static const SET_DEFAULT_DASHBOARD:String = "set_default_dashboard";
 		
 		public function Users(service:ProducteevService, methodCaller:MethodCaller, 
 							  resultParser:ResponseParser)
@@ -157,6 +184,51 @@ package com.producteev.webapis.methodgroups
 		{
 			processAndDispatch(URLLoader(event.target).data,
 				ProducteevResultEvent.USERS_VIEW,
+				_resultParser.parseView,
+				"users");
+		}
+		
+		/**
+		 * get information about other user you are sharing a workspace with  
+		 *
+		 * @see http://code.google.com/p/producteev-api/wiki/methodsDescriptions#users/colleagues
+		 */
+		public function colleagues():void
+		{
+			call(PRE+COLLEAGUES,
+				colleaguesHandler,
+				null);
+		}
+		
+		private function colleaguesHandler(event:Event):void
+		{
+			processAndDispatch(URLLoader(event.target).data,
+				ProducteevResultEvent.USERS_COLLEAGUES,
+				_resultParser.parseColleagues,
+				"users");
+		}
+		
+		/**
+		 * Set default dashboard 
+		 *
+		 * @param id_dashboard id of the dashboard 
+		 * 
+		 * @see http://code.google.com/p/producteev-api/wiki/methodsDescriptions#users/set_default_dashboard
+		 */
+		public function setDefaultDashboard(id_dashboard:int):void
+		{
+			call(PRE+SET_DEFAULT_DASHBOARD,
+				setDefaultDashboardHandler,
+				[
+					new NameValuePair("id_dashboard", id_dashboard)
+				]
+				);
+		}
+		
+		private function setDefaultDashboardHandler(event:Event):void
+		{
+			processAndDispatch(URLLoader(event.target).data,
+				ProducteevResultEvent.USERS_SET_DEFAULT_DASHBOARD,
 				_resultParser.parseView,
 				"users");
 		}
