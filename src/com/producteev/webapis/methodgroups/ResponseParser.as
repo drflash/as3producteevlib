@@ -3,6 +3,7 @@ package com.producteev.webapis.methodgroups
 	import com.adobe.serialization.json.JSONDecoder;
 	import com.adobe.utils.DateUtil;
 	import com.producteev.webapis.AuthResult;
+	import com.producteev.webapis.Dashboard;
 	import com.producteev.webapis.ProducteevError;
 	import com.producteev.webapis.User;
 	
@@ -99,7 +100,7 @@ package com.producteev.webapis.methodgroups
 		/**
 		 * Converts an user result XML object into an User instance
 		 */
-		public function parseView(response:XML):Object
+		public function parseView(response:XML):User
 		{
 			var user:User = new User();
 			user.time_signup = DateUtil.parseRFC822(response.@time_signup);
@@ -137,6 +138,61 @@ package com.producteev.webapis.methodgroups
 			}
 			
 			return user;
+		}
+		
+		/**
+		 * Converts an user result XML object into an array of User
+		 */
+		public function parseColleagues(response:XML):Array /* of User */ 
+		{
+			var colleagues:Array = new Array();
+			
+			for each (var u:XML in response.user ) 
+			{
+				var colleague:User = new User();
+				colleague.time_signup = DateUtil.parseRFC822(u.@time_signup);
+				colleague.avatar = u.@avatar;
+				colleague.company = u.@company;
+				colleague.default_dashboard = u.@default_dashboard;
+				colleague.deleted = u.@deleted;
+				colleague.email = u.@email;
+				colleague.facebook_id = u.@facebook_id;
+				colleague.firstName = u.@firstName;
+				colleague.id_user = u.@id_user;
+				colleague.lang = u.@lang;
+				colleague.lastName = u.@lastName;
+				colleague.sort_by = u.@sort_by;
+				colleague.timezone = u.@timezone;
+				
+				colleagues.push(colleague);
+			}
+			
+			return colleagues;
+		}
+		
+		/**
+		 * Converts an user result XML object into an array of Dashboards
+		 */
+		public function parseShowList(response:XML):Array /* of Dashboards */
+		{
+			var dashboards:Array = new Array();
+			
+			for each (var d:XML in response.dashboard) 
+			{
+				var dashboard:Dashboard = new Dashboard();
+				dashboard.deleted = parseInt(d.@deleted);
+				dashboard.id_creator = parseInt(d.@id_creator);
+				dashboard.id_dashboard = parseInt(d.@id_dashboard);
+				dashboard.smart_labels = parseInt(d.@smart_labels);
+				dashboard.status = parseInt(d.@status);
+				dashboard.time_lastchange = DateUtil.parseRFC822(d.@time_lastchange);
+				dashboard.title = d.@title;
+				dashboard.write_ok = d.@write_ok;
+				
+				dashboards.push(dashboard);
+			}
+			
+			return dashboards;
 		}
 	}
 }

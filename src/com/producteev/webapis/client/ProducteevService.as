@@ -3,6 +3,7 @@ package com.producteev.webapis.client
 	import com.adobe.net.DynamicURLLoader;
 	import com.adobe.webapis.URLLoaderBase;
 	import com.producteev.webapis.events.ProducteevFaultEvent;
+	import com.producteev.webapis.methodgroups.Dashboards;
 	import com.producteev.webapis.methodgroups.MethodCaller;
 	import com.producteev.webapis.methodgroups.ResponseParser;
 	import com.producteev.webapis.methodgroups.Users;
@@ -28,6 +29,8 @@ package com.producteev.webapis.client
 		
 		private var _users:Users;
 		
+		private var _dashboards:Dashboards;
+		
 		public function ProducteevService(apiKey:String, apiSecret:String)
 		{
 			_apiKey = apiKey;
@@ -37,6 +40,7 @@ package com.producteev.webapis.client
 			var responseParser:ResponseParser = new ResponseParser();
 			
 			_users = new Users(this, methodCaller, responseParser);
+			_dashboards = new Dashboards(this, methodCaller, responseParser);
 		}
 		
 		
@@ -105,6 +109,13 @@ package com.producteev.webapis.client
 			dispatchEvent(e);
 		}
 
+		/**
+		 * Provide read-only access to the Dashboards method group in the Producteev API
+		 */
+		public function get dashboards():Dashboards
+		{
+			return _dashboards;
+		}
 
 	}
 }

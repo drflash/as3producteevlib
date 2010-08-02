@@ -5,6 +5,7 @@ package com.producteev.webapis
 	public class ProducteevTestSuite
 	{
 		//public var producteevServiceTest:ProducteevCredentialsAndLoginTest;
-		public var producteevUsersTest:ProducteevUsersTest;
+		//public var producteevUsersTest:ProducteevUsersTest;
+		public var producteevDashboardsTest:ProducteevDashboardsTest;
 	}
 }

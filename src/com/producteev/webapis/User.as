@@ -18,7 +18,7 @@ package com.producteev.webapis
 		public var timezone:String;
 		public var default_dashboard:int;
 		
-		private var _colleagues:Array = new Array();
+		private var _colleagues:Array /* of User */  = new Array();
 		
 		public function addColleague(value:User):void
 		{

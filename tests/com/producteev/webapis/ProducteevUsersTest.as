@@ -5,10 +5,12 @@ package com.producteev.webapis
 	
 	import flexunit.framework.Assert;
 	
+	import org.flexunit.assertThat;
 	import org.flexunit.asserts.assertFalse;
 	import org.flexunit.asserts.assertNotNull;
 	import org.flexunit.asserts.assertTrue;
 	import org.flexunit.async.Async;
+	import org.hamcrest.core.isA;
 
 	public class ProducteevUsersTest
 	{
@@ -57,6 +59,52 @@ package com.producteev.webapis
 		}
 		
 		private function usersViewNonExistingIdColleagueHandler(e:ProducteevResultEvent, o:Object):void
+		{
+			assertFalse("event.success == false", e.success);
+			assertNotNull("error not null", e.data.error);
+		}
+		
+		[Test(async)]
+		public function testColleagues():void
+		{
+			var async:Function = Async.asyncHandler(this, usersColleaguesHandler, 500, timeOutHandler);
+			
+			service.users.addEventListener(ProducteevResultEvent.USERS_COLLEAGUES, async)
+			service.users.colleagues();
+		}
+		
+		private function usersColleaguesHandler(e:ProducteevResultEvent, o:Object):void
+		{
+			assertTrue("event.success == true", e.success);
+			assertThat(e.data.users, isA(Array));
+		}
+		
+		[Test(async)]
+		public function testSetDefaultDashboard():void
+		{
+			var async:Function = Async.asyncHandler(this, setDefaultDashboardHandler, 500, timeOutHandler);
+			
+			service.users.addEventListener(ProducteevResultEvent.USERS_SET_DEFAULT_DASHBOARD, async)
+			service.users.setDefaultDashboard(24046);
+		}
+		
+		private function setDefaultDashboardHandler(e:ProducteevResultEvent, o:Object):void
+		{
+			assertTrue("event.success == false", e.success);
+			assertThat(e.data.users, isA(User));
+		}
+		
+		
+		[Test(async)]
+		public function testDefaultDashboardWithWrongDashboardId():void
+		{
+			var async:Function = Async.asyncHandler(this, setDefaultDashboardWithWrongDashboardIdHandler, 500, timeOutHandler);
+			
+			service.users.addEventListener(ProducteevResultEvent.USERS_SET_DEFAULT_DASHBOARD, async)
+			service.users.setDefaultDashboard(36000);
+		}
+		
+		private function setDefaultDashboardWithWrongDashboardIdHandler(e:ProducteevResultEvent, o:Object):void
 		{
 			assertFalse("event.success == false", e.success);
 			assertNotNull("error not null", e.data.error);

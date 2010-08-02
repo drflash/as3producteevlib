@@ -14,6 +14,13 @@ package com.producteev.webapis.events
 		public static const USERS_LOGIN:String = "usersLogin";
 		public static const USERS_SIGNUP:String = "usersSignup";
 		public static const USERS_VIEW:String = "usersView";
+		public static const USERS_COLLEAGUES:String = "usersColleagues";
+		public static const USERS_SET_DEFAULT_DASHBOARD:String = "usersSetDefaultDashboard";
+		
+		/*****************************************
+		 /*     DASHBOARDS METHOD GROUP CALLS     */
+		/*****************************************/
+		public static const DASHBOARDS_SHOW_LIST:String = "dashboardsShowList";
 		
 		/**
 		 * True if the event is the result of a successful call,
