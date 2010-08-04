@@ -10,5 +10,17 @@ package com.producteev.webapis
 		public var smart_labels:int;
 		public var write_ok:int;
 		public var deleted:int;
+		
+		private var _accesslist:Array /* of User */ = new Array();
+		
+		public function addUserToAccessList(value:User):void
+		{
+			_accesslist.push(value);
+		}
+		
+		public function get accessList():Array
+		{
+			return _accesslist.slice();
+		}
 	}
 }

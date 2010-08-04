@@ -92,15 +92,10 @@ package com.producteev.webapis.methodgroups
 			return auth;
 		}
 		
-		public function parseSignup(response:XML):Object
-		{
-			return null
-		}
-		
 		/**
 		 * Converts an user result XML object into an User instance
 		 */
-		public function parseView(response:XML):User
+		public function parseUser(response:XML):User
 		{
 			var user:User = new User();
 			user.time_signup = DateUtil.parseRFC822(response.@time_signup);
@@ -193,6 +188,40 @@ package com.producteev.webapis.methodgroups
 			}
 			
 			return dashboards;
+		}
+		
+		/**
+		 * Converts an user result XML object into an instance of Dashboard
+		 */
+		public function parseDashboard(response:XML):Dashboard
+		{
+			var dashboard:Dashboard = new Dashboard();
+			dashboard.deleted = parseInt(response.@deleted);
+			dashboard.id_creator = parseInt(response.@id_creator);
+			dashboard.id_dashboard = parseInt(response.@id_dashboard);
+			dashboard.smart_labels = parseInt(response.@smart_labels);
+			dashboard.status = parseInt(response.@status);
+			dashboard.time_lastchange = DateUtil.parseRFC822(response.@time_lastchange);
+			dashboard.title = response.@title;
+			dashboard.write_ok = response.@write_ok;
+			
+			for each(var u:XML in response.dashboard.accesslist)
+			{
+				dashboard.addUserToAccessList(parseUser(u));
+			}
+				
+			return dashboard;
+		}
+		
+		/**
+		 * Converts an user result XML object into 
+		 */
+		public function parseDashboardDelete(response:XML):Boolean
+		{
+			if (response.@result == "TRUE")
+				return true;
+			else
+				return false;
 		}
 	}
 }

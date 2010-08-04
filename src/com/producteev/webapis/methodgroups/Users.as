@@ -16,13 +16,24 @@ package com.producteev.webapis.methodgroups
 	 *
 	 * The event contains the following properties
 	 *	success	- Boolean indicating if the call was successful or not
+	 *	data - When success is true, contains an "users" User instance
+	 *		   When success is false, contains an "error" ProducteevError instance
+	 *
+	 * @see com.producteev.webapis.ProducteevError
+	 */
+	[Event(name="usersSignup", type="com.producteev.webapis.events.ProducteevResultEvent")]
+	
+	/**
+	 * Broadcast as a result of the signup method being called
+	 *
+	 * The event contains the following properties
+	 *	success	- Boolean indicating if the call was successful or not
 	 *	data - When success is true, contains an "users" AuthResult instance
 	 *		   When success is false, contains an "error" ProducteevError instance
 	 *
 	 * @see com.producteev.webapis.ProducteevError
 	 */
 	[Event(name="usersLogin", type="com.producteev.webapis.events.ProducteevResultEvent")]
-	
 	
 	/**
 	 * Broadcast as a result of the view method being called
@@ -154,7 +165,7 @@ package com.producteev.webapis.methodgroups
 		{
 			processAndDispatch(URLLoader(event.target).data,
 				ProducteevResultEvent.USERS_SIGNUP,
-				_resultParser.parseSignup,
+				_resultParser.parseUser,
 				"users");
 		}
 		
@@ -184,7 +195,7 @@ package com.producteev.webapis.methodgroups
 		{
 			processAndDispatch(URLLoader(event.target).data,
 				ProducteevResultEvent.USERS_VIEW,
-				_resultParser.parseView,
+				_resultParser.parseUser,
 				"users");
 		}
 		
@@ -229,7 +240,7 @@ package com.producteev.webapis.methodgroups
 		{
 			processAndDispatch(URLLoader(event.target).data,
 				ProducteevResultEvent.USERS_SET_DEFAULT_DASHBOARD,
-				_resultParser.parseView,
+				_resultParser.parseUser,
 				"users");
 		}
 	}

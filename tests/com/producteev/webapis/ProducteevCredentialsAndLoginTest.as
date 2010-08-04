@@ -64,6 +64,38 @@ package com.producteev.webapis
 			assertEquals("event.data == Wrong Credentials", event.data, "Wrong credentials");
 		}
 		
+		[Test(async)]
+		public function testTooShortPassword():void
+		{
+			var asyncHandler:Function = Async.asyncHandler(this, testTooShortPassword, 500, null, handleTimeout);
+			
+			var service:ProducteevService =  new ProducteevService(Credentials.API_KEY, Credentials.API_SECRET);
+			service.users.addEventListener(ProducteevResultEvent.USERS_SIGNUP, asyncHandler);
+			service.users.signup("", "", "", "short");
+		}
+		
+		private function testTooShortPasswordHandler(event:ProducteevResultEvent, o:Object):void
+		{
+			assertFalse("event.success == false", event.success);
+			assertNotNull("event.data.error not null", event.data.error);
+		}
+		
+		[Test(async)]
+		public function testSignumWrongEmail():void
+		{
+			var asyncHandler:Function = Async.asyncHandler(this, testSignumWrongEmailHandler, 500, null, handleTimeout);
+			
+			var service:ProducteevService =  new ProducteevService(Credentials.API_KEY, Credentials.API_SECRET);
+			service.users.addEventListener(ProducteevResultEvent.USERS_SIGNUP, asyncHandler);
+			service.users.signup("àploa@.@", "", "", "product33v");
+		}
+		
+		private function testSignumWrongEmailHandler(event:ProducteevResultEvent, o:Object):void
+		{
+			assertFalse("event.success == false", event.success);
+			assertNotNull("event.data.error not null", event.data.error);
+		}
+		
 				
 		private function handleTimeout(passThourghData:Object):void
 		{
