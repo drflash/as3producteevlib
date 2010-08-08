@@ -6,6 +6,7 @@ package com.producteev.webapis.client
 	import com.producteev.webapis.methodgroups.Dashboards;
 	import com.producteev.webapis.methodgroups.MethodCaller;
 	import com.producteev.webapis.methodgroups.ResponseParser;
+	import com.producteev.webapis.methodgroups.Tasks;
 	import com.producteev.webapis.methodgroups.Users;
 	import com.producteev.webapis.producteevservice_internal;
 	
@@ -31,6 +32,8 @@ package com.producteev.webapis.client
 		
 		private var _dashboards:Dashboards;
 		
+		private var _tasks:Tasks;
+		
 		public function ProducteevService(apiKey:String, apiSecret:String)
 		{
 			_apiKey = apiKey;
@@ -41,6 +44,7 @@ package com.producteev.webapis.client
 			
 			_users = new Users(this, methodCaller, responseParser);
 			_dashboards = new Dashboards(this, methodCaller, responseParser);
+			_tasks = new Tasks(this, methodCaller, responseParser);
 		}
 		
 		
@@ -100,6 +104,22 @@ package com.producteev.webapis.client
 		}
 		
 		/**
+		 * Provide read-only access to the Dashboards method group in the Producteev API
+		 */
+		public function get dashboards():Dashboards
+		{
+			return _dashboards;
+		}
+		
+		/**
+		 * Provide read-only access to the Tasks method group in the Producteev API
+		 */
+		public function get tasks():Tasks
+		{
+			return _tasks;
+		}
+		
+		/**
 		 * Dispatch an error if a method calls trigger an IOErrorEvent
 		 **/
 		public function dispatchError(event:IOErrorEvent):void
@@ -109,13 +129,8 @@ package com.producteev.webapis.client
 			dispatchEvent(e);
 		}
 
-		/**
-		 * Provide read-only access to the Dashboards method group in the Producteev API
-		 */
-		public function get dashboards():Dashboards
-		{
-			return _dashboards;
-		}
+
+
 
 	}
 }

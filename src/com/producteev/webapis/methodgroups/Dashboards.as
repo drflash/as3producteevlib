@@ -156,7 +156,6 @@ package com.producteev.webapis.methodgroups
 	 */
 	public class Dashboards extends AbstractMethod
 	{
-		private static const PRE:String = "dashboards/";
 		
 		private static const SHOW_LIST:String = "show_list";
 		private static const CREATE:String = "create";
@@ -178,6 +177,8 @@ package com.producteev.webapis.methodgroups
 								   resultParser:ResponseParser)
 		{
 			super(service, methodCaller, resultParser);
+			pre = "dashboards/";
+			objectResultName = "dashboards";
 		}
 		
 		/**
@@ -198,15 +199,14 @@ package com.producteev.webapis.methodgroups
 				param.push(new NameValuePair("since", DateUtil.toRFC822(since)));
 			}
 				
-			call(PRE+SHOW_LIST, showListHandler, param);
+			call(SHOW_LIST, showListHandler, param);
 		}
 		
 		private function showListHandler(event:Event):void
 		{
 			processAndDispatch(URLLoader(event.target).data,
 				ProducteevResultEvent.DASHBOARDS_SHOW_LIST,
-				_resultParser.parseShowList,
-				"dashboards");
+				_resultParser.parseShowList);
 		}
 		
 		/**
@@ -217,15 +217,14 @@ package com.producteev.webapis.methodgroups
 		 */
 		public function create(title:String):void
 		{
-			call(PRE+CREATE, createHandler, [new NameValuePair("title", title)]);
+			call(CREATE, createHandler, [new NameValuePair("title", title)]);
 		}
 		
 		private function createHandler(event:Event):void
 		{
 			processAndDispatch(URLLoader(event.target).data,
 				ProducteevResultEvent.DASHBOARDS_CREATE,
-				_resultParser.parseDashboard,
-				"dashboards");
+				_resultParser.parseDashboard);
 		}
 		
 		/**
@@ -236,15 +235,14 @@ package com.producteev.webapis.methodgroups
 		 */
 		public function delete_(id_dashboard:int):void
 		{
-			call(PRE+DELETE, deleteHandler, [new NameValuePair("id_dashboard", id_dashboard)]);
+			call(DELETE, deleteHandler, [new NameValuePair("id_dashboard", id_dashboard)]);
 		}
 		
 		private function deleteHandler(event:Event):void
 		{
 			processAndDispatch(URLLoader(event.target).data,
 				ProducteevResultEvent.DASHBOARDS_DELETE,
-				_resultParser.parseDashboardDelete,
-				"dashboards");
+				_resultParser.parseDashboardDelete);
 		}
 		
 		/**
@@ -255,15 +253,14 @@ package com.producteev.webapis.methodgroups
 		 */
 		public function view(id_dashboard:int):void
 		{
-			call(PRE+VIEW, viewHandler, [new NameValuePair("id_dashboard", id_dashboard)]);
+			call(VIEW, viewHandler, [new NameValuePair("id_dashboard", id_dashboard)]);
 		}
 		
 		private function viewHandler(event:Event):void
 		{
 			processAndDispatch(URLLoader(event.target).data,
 				ProducteevResultEvent.DASHBOARDS_VIEW,
-				_resultParser.parseDashboard,
-				"dashboards");
+				_resultParser.parseDashboard);
 		}
 		
 		/**
@@ -285,15 +282,14 @@ package com.producteev.webapis.methodgroups
 			if (id_user_delegate > -1)
 				param.push(new NameValuePair("id_user_delegate", id_user_delegate));
 			
-			call(PRE+LEAVE, leaveHandler, param);
+			call(LEAVE, leaveHandler, param);
 		}
 		
 		private function leaveHandler(event:Event):void
 		{
 			processAndDispatch(URLLoader(event.target).data,
 				ProducteevResultEvent.DASHBOARDS_LEAVE,
-				_resultParser.parseDashboard,
-				"dashboards");
+				_resultParser.parseDashboard);
 		}
 		
 		/**
@@ -306,7 +302,7 @@ package com.producteev.webapis.methodgroups
 		 */
 		public function set_title(id_dashboard:int, title:String):void
 		{
-			call(PRE+SET_TITLE, setTitleHandler, [new NameValuePair("id_dashboard", id_dashboard),
+			call(SET_TITLE, setTitleHandler, [new NameValuePair("id_dashboard", id_dashboard),
 												  new NameValuePair("title", title)
 													]);
 		}
@@ -315,8 +311,7 @@ package com.producteev.webapis.methodgroups
 		{
 			processAndDispatch(URLLoader(event.target).data,
 				ProducteevResultEvent.DASHBOARDS_SET_TITLE,
-				_resultParser.parseDashboard,
-				"dashboards");
+				_resultParser.parseDashboard);
 		}
 		
 		/**
@@ -335,15 +330,14 @@ package com.producteev.webapis.methodgroups
 			if (since)
 				param.push(new NameValuePair("since", DateUtil.toRFC822(since)));
 			
-			call(PRE+TASKS, tasksHandler, param);
+			call(TASKS, tasksHandler, param);
 		}
 		
 		private function tasksHandler(event:Event):void
 		{
 			processAndDispatch(URLLoader(event.target).data,
 				ProducteevResultEvent.DASHBOARDS_TASKS,
-				_resultParser.parseTasks,
-				"dashboards");
+				_resultParser.parseTasks);
 		}
 		
 		/**
@@ -356,7 +350,7 @@ package com.producteev.webapis.methodgroups
 		 */
 		public function set_smart_labels(id_dashboard:int, value:Boolean):void
 		{
-			call(PRE+SET_SMART_LABELS, setSmartLabelsHandler, 
+			call(SET_SMART_LABELS, setSmartLabelsHandler, 
 				[new NameValuePair("id_dashboard", id_dashboard),
 				 new NameValuePair("value", int(value))
 				]);
@@ -366,8 +360,7 @@ package com.producteev.webapis.methodgroups
 		{
 			processAndDispatch(URLLoader(event.target).data,
 				ProducteevResultEvent.DASHBOARDS_SET_SMART_LABELS,
-				_resultParser.parseDashboard,
-				"dashboards");
+				_resultParser.parseDashboard);
 		}
 		
 		/**
@@ -379,7 +372,7 @@ package com.producteev.webapis.methodgroups
 		 */
 		public function confirm(id_dashboard:int):void
 		{
-			call(PRE+CONFIRM, confirmHandler, 
+			call(CONFIRM, confirmHandler, 
 				[new NameValuePair("id_dashboard", id_dashboard)
 				]);
 		}
@@ -388,8 +381,7 @@ package com.producteev.webapis.methodgroups
 		{
 			processAndDispatch(URLLoader(event.target).data,
 				ProducteevResultEvent.DASHBOARDS_CONFIRM,
-				_resultParser.parseDashboard,
-				"dashboards");
+				_resultParser.parseDashboard);
 		}
 		
 		/**
@@ -401,7 +393,7 @@ package com.producteev.webapis.methodgroups
 		 */
 		public function refuse(id_dashboard:int):void
 		{
-			call(PRE+REFUSE, refuseHandler, 
+			call(REFUSE, refuseHandler, 
 				[new NameValuePair("id_dashboard", id_dashboard)
 				]);
 		}
@@ -410,8 +402,7 @@ package com.producteev.webapis.methodgroups
 		{
 			processAndDispatch(URLLoader(event.target).data,
 				ProducteevResultEvent.DASHBOARDS_REFUSE,
-				_resultParser.parseDashboard,
-				"dashboards");
+				_resultParser.parseDashboard);
 		}
 		
 		/**
@@ -424,7 +415,7 @@ package com.producteev.webapis.methodgroups
 		 */
 		public function invite_user_by_id(id_dashboard:int, id_user_to:int):void
 		{
-			call(PRE+INVITE_USER_BY_ID, inviteUserByIdHandler, 
+			call(INVITE_USER_BY_ID, inviteUserByIdHandler, 
 				[
 					new NameValuePair("id_dashboard", id_dashboard),
 					new NameValuePair("id_user_to", id_user_to)
@@ -435,8 +426,7 @@ package com.producteev.webapis.methodgroups
 		{
 			processAndDispatch(URLLoader(event.target).data,
 				ProducteevResultEvent.DASHBOARDS_INVITE_USER_BY_ID,
-				_resultParser.parseDashboard,
-				"dashboards");
+				_resultParser.parseDashboard);
 		}
 		
 		/**
@@ -449,7 +439,7 @@ package com.producteev.webapis.methodgroups
 		 */
 		public function invite_user_by_email(id_dashboard:int, email:String):void
 		{
-			call(PRE+INVITE_USER_BY_EMAIL, inviteUserByEmailHandler, 
+			call(INVITE_USER_BY_EMAIL, inviteUserByEmailHandler, 
 				[
 					new NameValuePair("id_dashboard", id_dashboard),
 					new NameValuePair("email", email)
@@ -460,8 +450,7 @@ package com.producteev.webapis.methodgroups
 		{
 			processAndDispatch(URLLoader(event.target).data,
 				ProducteevResultEvent.DASHBOARDS_INVITE_USER_BY_EMAIL,
-				_resultParser.parseDashboard,
-				"dashboards");
+				_resultParser.parseDashboard);
 		}
 		
 		

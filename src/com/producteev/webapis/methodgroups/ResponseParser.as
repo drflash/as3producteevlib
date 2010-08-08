@@ -5,10 +5,10 @@ package com.producteev.webapis.methodgroups
 	import com.producteev.webapis.AuthResult;
 	import com.producteev.webapis.Dashboard;
 	import com.producteev.webapis.Label;
+	import com.producteev.webapis.Note;
 	import com.producteev.webapis.ProducteevError;
 	import com.producteev.webapis.Task;
 	import com.producteev.webapis.User;
-	import com.producteev.webapis.Note;
 	
 	import flash.xml.XMLDocument;
 	import flash.xml.XMLNode;
@@ -236,47 +236,53 @@ package com.producteev.webapis.methodgroups
 			
 			for each(var t:XML in response.task)
 			{
-				var task:Task = new Task();
-				task.d = parseInt(t.@d);
-				task.from = parseInt(t.@from);
-				task.id_creator = parseInt(t.@id_creator);
-				task.id_dashboard = parseInt(t.@id_dashboard);
-				task.id_responsible = parseInt(t.@id_responsible);
-				task.id_task = parseInt(t.@id_task);
-				task.nb_new_note = parseInt(t.@nb_new_note);
-				task.nb_note = parseInt(t.@nb_note);
-				task.progression = parseInt(t.@progression);
-				task.public_ = parseInt(t.@public);
-				task.r = parseInt(t.@r);
-				task.status = parseInt(t.@status);
-				task.task_activities = parseInt(t.@task_activities);
-				task.uid_lastchange = parseInt(t.@uid_lastchange);
-				task.viewed = parseInt(t.@viewed);
-				task.w = parseInt(t.@w);
-				task.x = parseInt(t.@x);
-				task.deadline = parseDate(t.@deadline);
-				task.deleted = Boolean(parseInt(t.@deleted));
-				task.reminder = t.@reminder;
-				task.star = Boolean(parseInt(t.@star));
-				task.time_created = parseDate(t.@time_created);
-				task.time_lastchange = parseDate(t.@time_lastchange);
-				task.time_public = parseDate(t.@time_public);
-				task.time_status = parseDate(t.@time_status);
-				task.title = t.@title;
-				
-				for each(var l:XML in t.labels.label)
-				{
-					task.addLabel(parseLabel(l));
-				}
-				
-				for each(var n:XML in t.notes.note)
-				{
-					task.addNote(parseNote(n));
-				}
+				tasks.push(parseTask(t));
 			}
-import com.producteev.webapis.Note;
 			
 			return tasks;		
+		}
+		
+		public function parseTask(response:XML):Task
+		{
+			var task:Task = new Task();
+			task.d = parseInt(response.@d);
+			task.from = parseInt(response.@from);
+			task.id_creator = parseInt(response.@id_creator);
+			task.id_dashboard = parseInt(response.@id_dashboard);
+			task.id_responsible = parseInt(response.@id_responsible);
+			task.id_task = parseInt(response.@id_task);
+			task.nb_new_note = parseInt(response.@nb_new_note);
+			task.nb_note = parseInt(response.@nb_note);
+			task.progression = parseInt(response.@progression);
+			task.public_ = parseInt(response.@public);
+			task.r = parseInt(response.@r);
+			task.status = parseInt(response.@status);
+			task.task_activities = parseInt(response.@task_activities);
+			task.uid_lastchange = parseInt(response.@uid_lastchange);
+			task.viewed = parseInt(response.@viewed);
+			task.w = parseInt(response.@w);
+			task.x = parseInt(response.@x);
+			task.deadline = parseDate(response.@deadline);
+			task.deleted = Boolean(parseInt(response.@deleted));
+			task.reminder = parseInt(response.@reminder);
+			task.star = parseInt(response.@star);
+			task.time_created = parseDate(response.@time_created);
+			task.time_lastchange = parseDate(response.@time_lastchange);
+			task.time_public = parseDate(response.@time_public);
+			task.time_status = parseDate(response.@time_status);
+			task.title = response.@title;
+			
+			for each(var l:XML in response.labels.label)
+			{
+				task.addLabel(parseLabel(l));
+			}
+			
+			for each(var n:XML in response.notes.note)
+			{
+				task.addNote(parseNote(n));
+			}
+			
+			return task;
 		}
 		
 		/**
