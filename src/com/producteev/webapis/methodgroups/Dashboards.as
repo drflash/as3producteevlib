@@ -1,5 +1,6 @@
 package com.producteev.webapis.methodgroups
 {
+	import com.adobe.utils.DateUtil;
 	import com.producteev.webapis.client.ProducteevService;
 	import com.producteev.webapis.events.ProducteevResultEvent;
 	
@@ -91,6 +92,18 @@ package com.producteev.webapis.methodgroups
 	[Event(name="dashboardsSetTitle", type="com.producteev.webapis.events.ProducteevResultEvent")]
 	
 	/**
+	 * Broadcast as a result of the tasks method being called
+	 *
+	 * The event contains the following properties
+	 *	success	- Boolean indicating if the call was successful or not
+	 *	data - When success is true, contains a "dashboards" array of tasks instances
+	 *		   When success is false, contains an "error" ProducteevError instance
+	 *
+	 * @see com.producteev.webapis.ProducteevError
+	 */
+	[Event(name="dashboardsTasks", type="com.producteev.webapis.events.ProducteevResultEvent")]
+	
+	/**
 	 * Broadcast as a result of the confirm method being called
 	 *
 	 * The event contains the following properties
@@ -115,6 +128,30 @@ package com.producteev.webapis.methodgroups
 	[Event(name="dashboardsRefuse", type="com.producteev.webapis.events.ProducteevResultEvent")]
 	
 	/**
+	 * Broadcast as a result of the invite_user_by_id method being called
+	 *
+	 * The event contains the following properties
+	 *	success	- Boolean indicating if the call was successful or not
+	 *	data - When success is true, contains a "dashboards" Dashboard instance
+	 *		   When success is false, contains an "error" ProducteevError instance
+	 *
+	 * @see com.producteev.webapis.ProducteevError
+	 */
+	[Event(name="dashboardsInviteUserById", type="com.producteev.webapis.events.ProducteevResultEvent")]
+	
+	/**
+	 * Broadcast as a result of the invite_user_by_email method being called
+	 *
+	 * The event contains the following properties
+	 *	success	- Boolean indicating if the call was successful or not
+	 *	data - When success is true, contains a "dashboards" Dashboard instance
+	 *		   When success is false, contains an "error" ProducteevError instance
+	 *
+	 * @see com.producteev.webapis.ProducteevError
+	 */
+	[Event(name="dashboardsInviteUserByEmail", type="com.producteev.webapis.events.ProducteevResultEvent")]
+	
+	/**
 	 * Contains the methods for the Dashboard method group in the Producteev API.
 	 */
 	public class Dashboards extends AbstractMethod
@@ -129,8 +166,11 @@ package com.producteev.webapis.methodgroups
 		private static const LEAVE:String = "leave";
 		private static const SET_TITLE:String = "set_title";
 		private static const SET_SMART_LABELS:String = "set_smart_labels";
+		private static const TASKS:String = "tasks";
 		private static const CONFIRM:String = "confirm";
 		private static const REFUSE:String = "refuse";
+		private static const INVITE_USER_BY_ID:String = "invite_user_by_id";
+		private static const INVITE_USER_BY_EMAIL:String = "invite_user_by_email";
 		
 		
 		public function Dashboards(service:ProducteevService, 
@@ -155,7 +195,7 @@ package com.producteev.webapis.methodgroups
 			if (since)
 			{
 				param = new Array();
-				param.push(new NameValuePair("since", since));
+				param.push(new NameValuePair("since", DateUtil.toRFC822(since)));
 			}
 				
 			call(PRE+SHOW_LIST, showListHandler, param);
@@ -280,6 +320,33 @@ package com.producteev.webapis.methodgroups
 		}
 		
 		/**
+		 * get every tasks of a dashboard    
+		 *
+		 * @param id_dashboard id of the dashboard
+		 * @param since(optional) if not null, the function only returns tasks modified or created since this date 
+		 * 
+		 * @see http://code.google.com/p/producteev-api/wiki/methodsDescriptions#dashboards/tasks
+		 */
+		public function tasks(id_dashboard:int, since:Date=null):void
+		{
+			var param:Array = new Array();
+			param.push(new NameValuePair("id_dashboard", id_dashboard));
+			
+			if (since)
+				param.push(new NameValuePair("since", DateUtil.toRFC822(since)));
+			
+			call(PRE+TASKS, tasksHandler, param);
+		}
+		
+		private function tasksHandler(event:Event):void
+		{
+			processAndDispatch(URLLoader(event.target).data,
+				ProducteevResultEvent.DASHBOARDS_TASKS,
+				_resultParser.parseTasks,
+				"dashboards");
+		}
+		
+		/**
 		 * set/unset smart labels    
 		 *
 		 * @param id_dashboard id of the dashboard
@@ -343,6 +410,56 @@ package com.producteev.webapis.methodgroups
 		{
 			processAndDispatch(URLLoader(event.target).data,
 				ProducteevResultEvent.DASHBOARDS_REFUSE,
+				_resultParser.parseDashboard,
+				"dashboards");
+		}
+		
+		/**
+		 * invite an user to a dashboard      
+		 *
+		 * @param id_dashboard id of the dashboard
+		 * @param id_user_to : id of the user to invite
+		 * 
+		 * @see http://code.google.com/p/producteev-api/wiki/methodsDescriptions#dashboards/invite_user_by_id
+		 */
+		public function invite_user_by_id(id_dashboard:int, id_user_to:int):void
+		{
+			call(PRE+INVITE_USER_BY_ID, inviteUserByIdHandler, 
+				[
+					new NameValuePair("id_dashboard", id_dashboard),
+					new NameValuePair("id_user_to", id_user_to)
+				]);
+		}
+		
+		private function inviteUserByIdHandler(event:Event):void
+		{
+			processAndDispatch(URLLoader(event.target).data,
+				ProducteevResultEvent.DASHBOARDS_INVITE_USER_BY_ID,
+				_resultParser.parseDashboard,
+				"dashboards");
+		}
+		
+		/**
+		 * invite an user to a dashboard using his/her email       
+		 *
+		 * @param id_dashboard id of the dashboard
+		 * @param email email of the user to invite
+		 * 
+		 * @see http://code.google.com/p/producteev-api/wiki/methodsDescriptions#dashboards/invite_user_by_email
+		 */
+		public function invite_user_by_email(id_dashboard:int, email:String):void
+		{
+			call(PRE+INVITE_USER_BY_EMAIL, inviteUserByEmailHandler, 
+				[
+					new NameValuePair("id_dashboard", id_dashboard),
+					new NameValuePair("email", email)
+				]);
+		}
+		
+		private function inviteUserByEmailHandler(event:Event):void
+		{
+			processAndDispatch(URLLoader(event.target).data,
+				ProducteevResultEvent.DASHBOARDS_INVITE_USER_BY_EMAIL,
 				_resultParser.parseDashboard,
 				"dashboards");
 		}

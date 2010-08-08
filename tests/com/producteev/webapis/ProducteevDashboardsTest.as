@@ -1,5 +1,6 @@
 package com.producteev.webapis
 {
+	import com.adobe.protocols.dict.Database;
 	import com.producteev.webapis.client.ProducteevService;
 	import com.producteev.webapis.events.ProducteevResultEvent;
 	
@@ -144,6 +145,7 @@ package com.producteev.webapis
 			service.dashboards.set_title(1, randomTitle);
 		}
 		
+		[Ignore]
 		[Test(async)]
 		public function testSetSmartLabelDashboard():void
 		{
@@ -151,14 +153,14 @@ package com.producteev.webapis
 			var async:Function = Async.asyncHandler(this, testSetSmartLabelDashboardHandler, 500, randomValue, timeOutHandler);
 			
 			service.dashboards.addEventListener(ProducteevResultEvent.DASHBOARDS_SET_SMART_LABELS, async)
-			service.dashboards.set_smart_labels(Credentials.defaultDashboardId, Boolean(randomValue));
+			service.dashboards.set_smart_labels(Credentials.defaultDashboardId, true);
 		}
 		
 		private function testSetSmartLabelDashboardHandler(e:ProducteevResultEvent, o:Object):void
 		{
 			assertTrue("event.success == true", e.success);
 			assertThat(e.data.dashboards, isA(Dashboard));
-			assertEquals(e.data.dashboards.smart_labels, o);
+			assertEquals(e.data.dashboards.smart_labels, 1);
 		}
 		
 		[Ignore]
@@ -179,6 +181,80 @@ package com.producteev.webapis
 			
 			service.dashboards.addEventListener(ProducteevResultEvent.DASHBOARDS_REFUSE, async)
 			service.dashboards.refuse(1);
+		}
+		
+		[Test(async)]
+		public function testInviteUserByIdNonExistingUser():void
+		{
+			var async:Function = Async.asyncHandler(this, assertErrorHandler, 500, null, timeOutHandler);
+			
+			service.dashboards.addEventListener(ProducteevResultEvent.DASHBOARDS_INVITE_USER_BY_ID, async)
+			service.dashboards.invite_user_by_id(Credentials.defaultDashboardId, -1);
+		}
+		
+		[Ignore]
+		[Test(async)]
+		public function testInviteUserByIdNonAccessibleDashboard():void
+		{
+			var async:Function = Async.asyncHandler(this, assertErrorHandler, 500, null, timeOutHandler);
+			
+			service.dashboards.addEventListener(ProducteevResultEvent.DASHBOARDS_INVITE_USER_BY_ID, async)
+			service.dashboards.invite_user_by_id(1, 1);
+		}
+		
+		[Test(async)]
+		public function testInviteUserByEmailBadFormattedEmail():void
+		{
+			var async:Function = Async.asyncHandler(this, assertErrorHandler, 500, null, timeOutHandler);
+			
+			service.dashboards.addEventListener(ProducteevResultEvent.DASHBOARDS_INVITE_USER_BY_EMAIL, async)
+			service.dashboards.invite_user_by_email(Credentials.defaultDashboardId, "badformattedemail");
+		}
+		
+		[Test(async)]
+		public function testInviteUserByEmail():void
+		{
+			var async:Function = Async.asyncHandler(this, testInviteUserByEmailHandler, 500, null, timeOutHandler);
+			
+			service.dashboards.addEventListener(ProducteevResultEvent.DASHBOARDS_INVITE_USER_BY_EMAIL, async)
+			service.dashboards.invite_user_by_email(Credentials.defaultDashboardId, "test@test.com");
+		}
+		
+		private function testInviteUserByEmailHandler(e:ProducteevResultEvent, o:Object):void
+		{
+			assertTrue("event.success == true", e.success);
+			assertThat(e.data.dashboards, isA(Dashboard));
+		}
+		
+		[Test(async)]
+		public function testTasks():void
+		{
+			var async:Function = Async.asyncHandler(this, testTasksHandler, 500, null, timeOutHandler);
+			
+			service.dashboards.addEventListener(ProducteevResultEvent.DASHBOARDS_TASKS, async)
+			service.dashboards.tasks(Credentials.defaultDashboardId);
+		}
+		
+		[Test(async)]
+		public function testTasksWithDateNotHappeningYet():void
+		{
+			var async:Function = Async.asyncHandler(this, testTasksWithDateNotHappeningYetHandler, 500, null, timeOutHandler);
+			
+			service.dashboards.addEventListener(ProducteevResultEvent.DASHBOARDS_TASKS, async)
+			service.dashboards.tasks(Credentials.defaultDashboardId, new Date());
+		}
+		
+		private function testTasksWithDateNotHappeningYetHandler(e:ProducteevResultEvent, o:Object):void
+		{
+			assertTrue("event.success == true", e.success);
+			assertThat(e.data.dashboards, isA(Array));
+			assertEquals(e.data.dashboards.length, 0);
+		}
+		
+		private function testTasksHandler(e:ProducteevResultEvent, o:Object):void
+		{
+			assertTrue("event.success == true", e.success);
+			assertThat(e.data.dashboards, isA(Array));
 		}
 		
 		private function assertErrorHandler(e:ProducteevResultEvent, o:Object):void
