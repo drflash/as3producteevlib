@@ -14,7 +14,12 @@ Producteev API is splitted in 5 groups :
   * Labels
   * Activities
 
-ProducteevService expose each of these group through a property of the same name.
+ProducteevService expose each of these group through a property of the same name:
+
+service.users
+service.dashboards
+...
+
 
 = Calling a method =
 
@@ -41,3 +46,8 @@ private function createHandler(event:ProducteevResultEvent):void
    //event.data.error contains the error if the call failed
   }
 }
+
+= Available methods =
+
+All method from the [http://code.google.com/p/producteev-api/wiki/methodsDescriptions producteev API] are available.
+Have a look at the documentation (available in the download package)to find the corresponding AS3 methods
