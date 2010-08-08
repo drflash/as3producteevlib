@@ -6,6 +6,7 @@ package com.producteev.webapis
 	{
 		//public var producteevServiceTest:ProducteevCredentialsAndLoginTest;
 		//public var producteevUsersTest:ProducteevUsersTest;
-		public var producteevDashboardsTest:ProducteevDashboardsTest;
+		//public var producteevDashboardsTest:ProducteevDashboardsTest;
+		public var producteevTasksTest:ProducteevTasksTest;
 	}
 }

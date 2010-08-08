@@ -26,6 +26,10 @@ package com.producteev.webapis.methodgroups
 		 */
 		protected var _resultParser:ResponseParser;
 		
+		protected var pre:String;
+		
+		protected var objectResultName:String; 
+		
 		public function AbstractMethod(service:ProducteevService, methodCaller:MethodCaller, resultParser:ResponseParser)
 		{
 			_service = service;
@@ -40,7 +44,7 @@ package com.producteev.webapis.methodgroups
 								callback:Function,
 								parameters:Array):void
 		{
-			_methodCaller.call(_service, methodName, callback, parameters);
+			_methodCaller.call(_service, pre+methodName, callback, parameters);
 		}
 		
 		/**
@@ -48,11 +52,10 @@ package com.producteev.webapis.methodgroups
 		 */
 		protected function processAndDispatch(response:String,
 											  responseConstant:String,
-											  parseFunction:Function,
-											  propertyName:String):void
+											  parseFunction:Function):void
 		{
 			var event:ProducteevResultEvent = new ProducteevResultEvent(responseConstant);
-			var result:Object = _resultParser.process(response, parseFunction, propertyName);
+			var result:Object = _resultParser.process(response, parseFunction, objectResultName);
 			
 			event.success = result.success;
 			event.data = result.data;

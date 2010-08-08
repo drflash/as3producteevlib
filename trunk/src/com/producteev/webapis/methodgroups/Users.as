@@ -77,8 +77,6 @@ package com.producteev.webapis.methodgroups
 	 */
 	public class Users extends AbstractMethod
 	{
-		private static const PRE:String = "users/";
-		
 		private static const LOGIN:String = "login";
 		private static const SIGNUP:String = "signup";
 		private static const VIEW:String = "view";
@@ -89,6 +87,8 @@ package com.producteev.webapis.methodgroups
 							  resultParser:ResponseParser)
 		{
 			super(service, methodCaller, resultParser);
+			pre = "users/";
+			objectResultName = "users";
 		}
 		
 		/**
@@ -101,7 +101,7 @@ package com.producteev.webapis.methodgroups
 		 */
 		public function login(email:String, password:String):void
 		{
-			call(PRE+LOGIN,
+			call(LOGIN,
 				 loginHandler, 
 				[
 					new NameValuePair("email", email),
@@ -125,8 +125,7 @@ package com.producteev.webapis.methodgroups
 			{
 				processAndDispatch(URLLoader(event.target).data,
 					ProducteevResultEvent.USERS_LOGIN,
-					_resultParser.parseLogin,
-					"users"
+					_resultParser.parseLogin
 				);
 			}
 			
@@ -155,7 +154,7 @@ package com.producteev.webapis.methodgroups
 			if (fbuid > -1)
 				params.push(new NameValuePair("fbuid", fbuid));
 							
-			call(PRE+SIGNUP,
+			call(SIGNUP,
 				 signupHandler,
 				 params);
 				 
@@ -165,8 +164,7 @@ package com.producteev.webapis.methodgroups
 		{
 			processAndDispatch(URLLoader(event.target).data,
 				ProducteevResultEvent.USERS_SIGNUP,
-				_resultParser.parseUser,
-				"users");
+				_resultParser.parseUser);
 		}
 		
 		
@@ -181,12 +179,12 @@ package com.producteev.webapis.methodgroups
 		public function view(id_colleague:int = -1):void
 		{
 			if (id_colleague > -1)
-				call(PRE+VIEW,
+				call(VIEW,
 					viewHandler,
 					[new NameValuePair("id_colleague", id_colleague)]
 					);
 			else
-				call(PRE+VIEW,
+				call(VIEW,
 					viewHandler,
 					null);
 		}
@@ -195,8 +193,7 @@ package com.producteev.webapis.methodgroups
 		{
 			processAndDispatch(URLLoader(event.target).data,
 				ProducteevResultEvent.USERS_VIEW,
-				_resultParser.parseUser,
-				"users");
+				_resultParser.parseUser);
 		}
 		
 		/**
@@ -206,7 +203,7 @@ package com.producteev.webapis.methodgroups
 		 */
 		public function colleagues():void
 		{
-			call(PRE+COLLEAGUES,
+			call(COLLEAGUES,
 				colleaguesHandler,
 				null);
 		}
@@ -215,8 +212,7 @@ package com.producteev.webapis.methodgroups
 		{
 			processAndDispatch(URLLoader(event.target).data,
 				ProducteevResultEvent.USERS_COLLEAGUES,
-				_resultParser.parseColleagues,
-				"users");
+				_resultParser.parseColleagues);
 		}
 		
 		/**
@@ -228,7 +224,7 @@ package com.producteev.webapis.methodgroups
 		 */
 		public function setDefaultDashboard(id_dashboard:int):void
 		{
-			call(PRE+SET_DEFAULT_DASHBOARD,
+			call(SET_DEFAULT_DASHBOARD,
 				setDefaultDashboardHandler,
 				[
 					new NameValuePair("id_dashboard", id_dashboard)
@@ -240,8 +236,7 @@ package com.producteev.webapis.methodgroups
 		{
 			processAndDispatch(URLLoader(event.target).data,
 				ProducteevResultEvent.USERS_SET_DEFAULT_DASHBOARD,
-				_resultParser.parseUser,
-				"users");
+				_resultParser.parseUser);
 		}
 	}
 }
