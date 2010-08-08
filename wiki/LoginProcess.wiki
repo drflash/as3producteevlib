@@ -36,3 +36,5 @@ private function usersLoginHandler(e:ProducteevResultEvent):void
 	
 }
 }}}
+
+Once the token is setted in the service, you will be able to call any other methods.
