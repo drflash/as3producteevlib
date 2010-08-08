@@ -8,26 +8,26 @@ All methods are available through the ProducteevService class.
 = Method Groups =
 
 Producteev API is splitted in 5 groups :
-* Users
-* Dashboards
-* Tasks
-* Labels
-* Activities
+  * Users
+  * Dashboards
+  * Tasks
+  * Labels
+  * Activities
 
 ProducteevService expose each of these group through a property of the same name.
 
 = Calling a method =
 
-* First, you need to authenticate the user in order to call any other methods. See [ProcessLogin]
+  # First, you need to authenticate the user in order to call any other methods. See [ProcessLogin]
 
-* Add an event listener and call the method you re interested in :
+  # Add an event listener and call the method you re interested in :
 
 {{{
 service.dashboards.addEventListener(ProducteevResultEvent.DASHBOARDS_CREATE, createHandler);
 service.dashboards.create('myNewDashboard');
 }}}
 
-* Verify the result sent from the server
+  # Verify the result sent from the server
 
 {{{
 private function createHandler(event:ProducteevResultEvent):void
