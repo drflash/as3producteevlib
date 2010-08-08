@@ -14,11 +14,12 @@ Producteev API is splitted in 5 groups :
   * Labels
   * Activities
 
-ProducteevService expose each of these group through a property of the same name:
+ProducteevService exposes each of these groups through a property of the same name:
 
-service.users
-service.dashboards
+  * service.users
+  * service.dashboards
 ...
+
 
 
 = Calling a method =
@@ -49,5 +50,22 @@ private function createHandler(event:ProducteevResultEvent):void
 
 = Available methods =
 
-All method from the [http://code.google.com/p/producteev-api/wiki/methodsDescriptions producteev API] are available.
-Have a look at the documentation (available in the download package)to find the corresponding AS3 methods
+All method from the [http://code.google.com/p/producteev-api/wiki/methodsDescriptions producteevAPI] are available.
+Have a look at the documentation (available in the download package) to find the corresponding AS3 methods.
+
+= Event Listeners = 
+
+Everytime you call a method, an ProducteevResultEvent is sent by the group (users, dashboards, ...) that initiated the call.
+
+Usually, the name of the event constant name is made of :
+  * the name of the group
+  * an underscore
+  * the name of the method
+
+So if you call 
+
+{{{
+service.tasks.create
+}}}
+
+the dispatched event is ProducteevResultEvent.TASKS_CREATE
