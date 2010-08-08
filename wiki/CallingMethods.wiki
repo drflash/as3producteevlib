@@ -18,7 +18,7 @@ ProducteevService exposes each of these groups through a property of the same na
 
   * service.users
   * service.dashboards
-...
+  * ...
 
 
 
@@ -47,10 +47,11 @@ private function createHandler(event:ProducteevResultEvent):void
    //event.data.error contains the error if the call failed
   }
 }
+}}}
 
 = Available methods =
 
-All method from the [http://code.google.com/p/producteev-api/wiki/methodsDescriptions producteevAPI] are available.
+All method from the [http://code.google.com/p/producteev-api/wiki/methodsDescriptions producteev API] are available.
 Have a look at the documentation (available in the download package) to find the corresponding AS3 methods.
 
 = Event Listeners = 
