@@ -4,8 +4,11 @@ package com.producteev.webapis.methodgroups
 	import com.adobe.utils.DateUtil;
 	import com.producteev.webapis.AuthResult;
 	import com.producteev.webapis.Dashboard;
+	import com.producteev.webapis.Label;
 	import com.producteev.webapis.ProducteevError;
+	import com.producteev.webapis.Task;
 	import com.producteev.webapis.User;
+	import com.producteev.webapis.Note;
 	
 	import flash.xml.XMLDocument;
 	import flash.xml.XMLNode;
@@ -98,7 +101,7 @@ package com.producteev.webapis.methodgroups
 		public function parseUser(response:XML):User
 		{
 			var user:User = new User();
-			user.time_signup = DateUtil.parseRFC822(response.@time_signup);
+			user.time_signup = parseDate(response.@time_signup);
 			user.avatar = response.@avatar;
 			user.company = response.@company;
 			user.default_dashboard = response.@default_dashboard;
@@ -115,7 +118,7 @@ package com.producteev.webapis.methodgroups
 			for each (var u:XML in response.colleagues.user ) 
 			{
 				var colleague:User = new User();
-				colleague.time_signup = DateUtil.parseRFC822(u.@time_signup);
+				colleague.time_signup = parseDate(u.@time_signup);
 				colleague.avatar = u.@avatar;
 				colleague.company = u.@company;
 				colleague.default_dashboard = u.@default_dashboard;
@@ -145,7 +148,7 @@ package com.producteev.webapis.methodgroups
 			for each (var u:XML in response.user ) 
 			{
 				var colleague:User = new User();
-				colleague.time_signup = DateUtil.parseRFC822(u.@time_signup);
+				colleague.time_signup = parseDate(u.@time_signup);
 				colleague.avatar = u.@avatar;
 				colleague.company = u.@company;
 				colleague.default_dashboard = u.@default_dashboard;
@@ -180,7 +183,7 @@ package com.producteev.webapis.methodgroups
 				dashboard.id_dashboard = parseInt(d.@id_dashboard);
 				dashboard.smart_labels = parseInt(d.@smart_labels);
 				dashboard.status = parseInt(d.@status);
-				dashboard.time_lastchange = DateUtil.parseRFC822(d.@time_lastchange);
+				dashboard.time_lastchange = parseDate(d.@time_lastchange);
 				dashboard.title = d.@title;
 				dashboard.write_ok = d.@write_ok;
 				
@@ -191,7 +194,7 @@ package com.producteev.webapis.methodgroups
 		}
 		
 		/**
-		 * Converts an user result XML object into an instance of Dashboard
+		 * Converts an dashboard result XML object into an instance of Dashboard
 		 */
 		public function parseDashboard(response:XML):Dashboard
 		{
@@ -201,7 +204,7 @@ package com.producteev.webapis.methodgroups
 			dashboard.id_dashboard = parseInt(response.@id_dashboard);
 			dashboard.smart_labels = parseInt(response.@smart_labels);
 			dashboard.status = parseInt(response.@status);
-			dashboard.time_lastchange = DateUtil.parseRFC822(response.@time_lastchange);
+			dashboard.time_lastchange = parseDate(response.@time_lastchange);
 			dashboard.title = response.@title;
 			dashboard.write_ok = response.@write_ok;
 			
@@ -222,6 +225,109 @@ package com.producteev.webapis.methodgroups
 				return true;
 			else
 				return false;
+		}
+		
+		/**
+		 * Converts a list of XML tasks object into an Array of Tasks instance 
+		 */
+		public function parseTasks(response:XML):Array /* of Tasks */
+		{
+			var tasks:Array = new Array();
+			
+			for each(var t:XML in response.task)
+			{
+				var task:Task = new Task();
+				task.d = parseInt(t.@d);
+				task.from = parseInt(t.@from);
+				task.id_creator = parseInt(t.@id_creator);
+				task.id_dashboard = parseInt(t.@id_dashboard);
+				task.id_responsible = parseInt(t.@id_responsible);
+				task.id_task = parseInt(t.@id_task);
+				task.nb_new_note = parseInt(t.@nb_new_note);
+				task.nb_note = parseInt(t.@nb_note);
+				task.progression = parseInt(t.@progression);
+				task.public_ = parseInt(t.@public);
+				task.r = parseInt(t.@r);
+				task.status = parseInt(t.@status);
+				task.task_activities = parseInt(t.@task_activities);
+				task.uid_lastchange = parseInt(t.@uid_lastchange);
+				task.viewed = parseInt(t.@viewed);
+				task.w = parseInt(t.@w);
+				task.x = parseInt(t.@x);
+				task.deadline = parseDate(t.@deadline);
+				task.deleted = Boolean(parseInt(t.@deleted));
+				task.reminder = t.@reminder;
+				task.star = Boolean(parseInt(t.@star));
+				task.time_created = parseDate(t.@time_created);
+				task.time_lastchange = parseDate(t.@time_lastchange);
+				task.time_public = parseDate(t.@time_public);
+				task.time_status = parseDate(t.@time_status);
+				task.title = t.@title;
+				
+				for each(var l:XML in t.labels.label)
+				{
+					task.addLabel(parseLabel(l));
+				}
+				
+				for each(var n:XML in t.notes.note)
+				{
+					task.addNote(parseNote(n));
+				}
+			}
+import com.producteev.webapis.Note;
+			
+			return tasks;		
+		}
+		
+		/**
+		 * Converts a label XML into Label instance 
+		 */
+		public function parseLabel(response:XML):Label
+		{
+			var label:Label = new Label();
+			label.color = response.@color;
+			label.deleted = Boolean(parseInt(response.@deleted));
+			label.from = parseInt(response.@from);
+			label.id_creator = parseInt(response.@id_creator);
+			label.id_dashboard = parseInt(response.@id_dashboard);
+			label.id_label = parseInt(response.@id_label);
+			label.order = parseInt(response.@order);
+			label.order_position = parseInt(response.@order_position);
+			label.time_create = parseDate(response.@time_create);
+			label.time_lastchange = parseDate(response.@time_lastchange);
+			label.title = response.@title;
+			label.type = parseInt(response.@type);
+			label.x = parseInt(response.@x);
+			label.y = parseInt(response.@y);
+			
+			return label;
+		}
+		
+		/**
+		 * Converts a note XML into Note instance 
+		 */
+		public function parseNote(response:XML):Note
+		{
+			var n:Note = new Note();
+			n.deleted = Boolean(parseInt(response.@deleted));
+			n.file_name = response.@file_name;
+			n.file_url = response.@file_url;
+			n.id_creator = parseInt(response.@id_creator);
+			n.id_note = parseInt(response.@id_note);
+			n.id_task_exec = parseInt(response.@id_task_exec);
+			n.message = response.@message;
+			n.time_create = parseDate(response.@time_create);
+			n.time_lastchange = parseDate(response.@time_lastchange);
+			
+			return n;
+		}
+		
+		private function parseDate(date:String):Date
+		{
+			if (date && date != "")
+				return DateUtil.parseRFC822(date);
+			else
+				return null;
 		}
 	}
 }
