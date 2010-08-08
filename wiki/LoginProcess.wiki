@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+#summary Sample code to authenticate a user for your application
 
 = Introduction =
 
