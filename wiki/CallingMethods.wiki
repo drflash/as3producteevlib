@@ -1,0 +1,43 @@
+#summary Calling method from the API
+
+= Introduction =
+
+Calling method is really easy if you're used to asynchronous calls in AS3.
+All methods are available through the ProducteevService class.
+
+= Method Groups =
+
+Producteev API is splitted in 5 groups :
+* Users
+* Dashboards
+* Tasks
+* Labels
+* Activities
+
+ProducteevService expose each of these group through a property of the same name.
+
+= Calling a method =
+
+* First, you need to authenticate the user in order to call any other methods. See [ProcessLogin]
+
+* Add an event listener and call the method you re interested in :
+
+{{{
+service.dashboards.addEventListener(ProducteevResultEvent.DASHBOARDS_CREATE, createHandler);
+service.dashboards.create('myNewDashboard');
+}}}
+
+* Verify the result sent from the server
+
+{{{
+private function createHandler(event:ProducteevResultEvent):void
+{
+  if (event.success)
+  {
+   //event.data.dashboards contains the result of the call
+  }
+  else
+  {
+   //event.data.error contains the error if the call failed
+  }
+}
