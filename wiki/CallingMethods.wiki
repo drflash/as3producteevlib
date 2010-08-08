@@ -18,7 +18,7 @@ ProducteevService expose each of these group through a property of the same name
 
 = Calling a method =
 
-  * First, you need to authenticate the user in order to call any other methods. See [ProcessLogin]
+  * First, you need to authenticate the user in order to call any other methods. See [LoginProcess]
 
   * Add an event listener and call the method you re interested in :
 
