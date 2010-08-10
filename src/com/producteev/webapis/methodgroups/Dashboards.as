@@ -56,6 +56,18 @@ package com.producteev.webapis.methodgroups
 	[Event(name="dashboardsView", type="com.producteev.webapis.events.ProducteevResultEvent")]
 	
 	/**
+	 * Broadcast as a result of the access method being called
+	 *
+	 * The event contains the following properties
+	 *	success	- Boolean indicating if the call was successful or not
+	 *	data - When success is true, contains a "dashboards" array of User instances
+	 *		   When success is false, contains an "error" ProducteevError instance
+	 *
+	 * @see com.producteev.webapis.ProducteevError
+	 */
+	[Event(name="dashboardsAccess", type="com.producteev.webapis.events.ProducteevResultEvent")]
+	
+	/**
 	 * Broadcast as a result of the leave method being called
 	 *
 	 * The event contains the following properties
@@ -242,7 +254,7 @@ package com.producteev.webapis.methodgroups
 		{
 			processAndDispatch(URLLoader(event.target).data,
 				ProducteevResultEvent.DASHBOARDS_DELETE,
-				_resultParser.parseDashboardDelete);
+				_resultParser.parseDelete);
 		}
 		
 		/**
@@ -261,6 +273,24 @@ package com.producteev.webapis.methodgroups
 			processAndDispatch(URLLoader(event.target).data,
 				ProducteevResultEvent.DASHBOARDS_VIEW,
 				_resultParser.parseDashboard);
+		}
+		
+		/**
+		 * return the list of users who can access a specific dashboard   
+		 *
+		 * @param id_dashboard id of the dashboard
+		 * @see http://code.google.com/p/producteev-api/wiki/methodsDescriptions#dashboards/access
+		 */
+		public function access(id_dashboard:int):void
+		{
+			call(ACCESS, accessHandler, [new NameValuePair("id_dashboard", id_dashboard)]);
+		}
+		
+		private function accessHandler(event:Event):void
+		{
+			processAndDispatch(URLLoader(event.target).data,
+				ProducteevResultEvent.DASHBOARDS_ACCESS,
+				_resultParser.parseColleagues);
 		}
 		
 		/**

@@ -108,6 +108,21 @@ package com.producteev.webapis
 			service.dashboards.view(1);
 		}
 		
+		[Test(async)]
+		public function testAccess():void
+		{
+			var async:Function = Async.asyncHandler(this, assertErrorHandler, 500, null, timeOutHandler);
+			
+			service.dashboards.addEventListener(ProducteevResultEvent.DASHBOARDS_ACCESS, async)
+			service.dashboards.access(Credentials.defaultDashboardId);
+		}
+		
+		private function testAccessHandler(e:ProducteevResultEvent, o:Object):void
+		{
+			assertTrue("event.success == true",e.success);
+			assertThat(e.data.dashboards, isA(Array));
+		}
+		
 		[Ignore]
 		[Test(async)]
 		public function testLeaveDefaultDashboard():void

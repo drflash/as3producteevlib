@@ -4,6 +4,7 @@ package com.producteev.webapis.client
 	import com.adobe.webapis.URLLoaderBase;
 	import com.producteev.webapis.events.ProducteevFaultEvent;
 	import com.producteev.webapis.methodgroups.Dashboards;
+	import com.producteev.webapis.methodgroups.Labels;
 	import com.producteev.webapis.methodgroups.MethodCaller;
 	import com.producteev.webapis.methodgroups.ResponseParser;
 	import com.producteev.webapis.methodgroups.Tasks;
@@ -34,6 +35,8 @@ package com.producteev.webapis.client
 		
 		private var _tasks:Tasks;
 		
+		private var _labels:Labels;
+		
 		public function ProducteevService(apiKey:String, apiSecret:String)
 		{
 			_apiKey = apiKey;
@@ -45,6 +48,7 @@ package com.producteev.webapis.client
 			_users = new Users(this, methodCaller, responseParser);
 			_dashboards = new Dashboards(this, methodCaller, responseParser);
 			_tasks = new Tasks(this, methodCaller, responseParser);
+			_labels = new Labels(this, methodCaller, responseParser);
 		}
 		
 		
@@ -120,6 +124,14 @@ package com.producteev.webapis.client
 		}
 		
 		/**
+		 * Provide read-only access to the Labels method group in the Producteev API
+		 */
+		public function get labels():Labels
+		{
+			return _labels;
+		}
+		
+		/**
 		 * Dispatch an error if a method calls trigger an IOErrorEvent
 		 **/
 		public function dispatchError(event:IOErrorEvent):void
@@ -128,8 +140,6 @@ package com.producteev.webapis.client
 			e.data = event.text;
 			dispatchEvent(e);
 		}
-
-
 
 
 	}

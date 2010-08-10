@@ -2,6 +2,7 @@ package com.producteev.webapis.methodgroups
 {
 	import com.adobe.serialization.json.JSONDecoder;
 	import com.adobe.utils.DateUtil;
+	import com.producteev.webapis.Activity;
 	import com.producteev.webapis.AuthResult;
 	import com.producteev.webapis.Dashboard;
 	import com.producteev.webapis.Label;
@@ -219,7 +220,7 @@ package com.producteev.webapis.methodgroups
 		/**
 		 * Converts an user result XML object into 
 		 */
-		public function parseDashboardDelete(response:XML):Boolean
+		public function parseDelete(response:XML):Boolean
 		{
 			if (response.@result == "TRUE")
 				return true;
@@ -286,6 +287,21 @@ package com.producteev.webapis.methodgroups
 		}
 		
 		/**
+		 * Converts a list of XML labels object into an Array of Label instance 
+		 */
+		public function parseLabels(response:XML):Array /* of Label */
+		{
+			var labels:Array = new Array();
+			
+			for each(var l:XML in response.label)
+			{
+				labels.push(parseLabel(l));
+			}
+			
+			return labels;		
+		}
+		
+		/**
 		 * Converts a label XML into Label instance 
 		 */
 		public function parseLabel(response:XML):Label
@@ -310,6 +326,21 @@ package com.producteev.webapis.methodgroups
 		}
 		
 		/**
+		 * Converts a list of XML notes object into an Array of Note instance 
+		 */
+		public function parseNotes(response:XML):Array /* of Note */
+		{
+			var notes:Array = new Array();
+			
+			for each(var n:XML in response.note)
+			{
+				notes.push(parseNote(n));
+			}
+			
+			return notes;		
+		}
+		
+		/**
 		 * Converts a note XML into Note instance 
 		 */
 		public function parseNote(response:XML):Note
@@ -326,6 +357,29 @@ package com.producteev.webapis.methodgroups
 			n.time_lastchange = parseDate(response.@time_lastchange);
 			
 			return n;
+		}
+		
+		/**
+		 * Converts a list of XML activities object into an Array of Activity instance 
+		 */
+		public function parseActivities(response:XML):Array /* of Activity */
+		{
+			var activities:Array = new Array();
+			
+			for each(var a:XML in response.activity)
+			{
+				activities.push(parseActivity(a));
+			}
+			
+			return activities;		
+		}
+		
+		/**
+		 * Converts an activity XML into Activity instance 
+		 */
+		public function parseActivity(response:XML):Activity
+		{
+			return null;
 		}
 		
 		private function parseDate(date:String):Date

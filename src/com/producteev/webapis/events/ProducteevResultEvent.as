@@ -56,9 +56,19 @@ package com.producteev.webapis.events
 		public static const TASKS_NOTE_VIEW:String = "tasksNoteView";
 		public static const TASKS_NOTES_GET:String = "tasksNotesGet";
 		public static const TASKS_NOTE_CREATE:String = "tasksNoteCreate";
-		public static const TASKS_NOTE_DELETED:String = "tasksNotDeleted";
+		public static const TASKS_NOTE_DELETE:String = "tasksNotDelete";
 		public static const TASKS_ACTIVITY_VIEW:String = "tasksActivityView";
 		public static const TASKS_SHOW_LIST_ACTIVITIES:String = "tasksShowListActivities";
+		
+		/************************************
+		 /*    LABELS METHOD GROUP CALLS     */
+		/************************************/
+		public static const LABELS_CREATE:String = "labelsCreate";
+		public static const LABELS_VIEW:String = "labelsView";
+		public static const LABELS_SHOW_LIST:String = "labelsShowList";
+		public static const LABELS_DELETE:String = "labelsDelete";
+		public static const LABELS_TASKS:String = "labelsTasks";
+		public static const LABELS_SET_TITLE:String = "labelsSetTitle";
 		
 		/**
 		 * True if the event is the result of a successful call,
