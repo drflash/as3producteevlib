@@ -12,6 +12,7 @@ package com.producteev.webapis
 	import org.flexunit.asserts.assertNotNull;
 	import org.flexunit.asserts.assertTrue;
 	import org.flexunit.async.Async;
+	import org.flexunit.flexui.patterns.AssertContainedPattern;
 	import org.hamcrest.collection.array;
 	import org.hamcrest.core.isA;
 
@@ -93,7 +94,6 @@ package com.producteev.webapis
 			service.tasks.view(-1);
 		}
 		
-		[Ignore]
 		[Test(async)]
 		public function testShowList():void
 		{
@@ -116,6 +116,138 @@ package com.producteev.webapis
 			
 			service.tasks.addEventListener(ProducteevResultEvent.TASKS_SET_TITLE, async)
 			service.tasks.set_title(-1, "test");
+		}
+		
+		[Test(async)]
+		public function testDeleteNonExistingTask():void
+		{
+			var async:Function = Async.asyncHandler(this, assertErrorHandler, 500,null,  timeOutHandler);
+			
+			service.tasks.addEventListener(ProducteevResultEvent.TASKS_DELETE, async)
+			service.tasks.remove(-1);
+		}
+		
+		[Ignore]
+		[Test(async)]
+		public function testAccessNonExistingTask():void
+		{
+			var async:Function = Async.asyncHandler(this, assertErrorHandler, 500,null,  timeOutHandler);
+			
+			service.tasks.addEventListener(ProducteevResultEvent.TASKS_ACCESS, async)
+			service.tasks.access(-1);
+		}
+		
+		[Test(async)]
+		public function testSetWorkspaceNonExistingTask():void
+		{
+			var async:Function = Async.asyncHandler(this, assertErrorHandler, 500,null,  timeOutHandler);
+			
+			service.tasks.addEventListener(ProducteevResultEvent.TASKS_SET_WORKSPACE, async)
+			service.tasks.set_workspace(-1, Credentials.defaultDashboardId);
+		}
+		
+		[Ignore]
+		[Test(async)]
+		public function testSetWorkspaceNonExistingDashboard():void
+		{
+			var async:Function = Async.asyncHandler(this, assertErrorHandler, 500,null,  timeOutHandler);
+			
+			service.tasks.addEventListener(ProducteevResultEvent.TASKS_SET_WORKSPACE, async)
+			service.tasks.set_workspace(-1, -1);
+		}
+		
+		[Test(async)]
+		public function testLabelsNonExistingTask():void
+		{
+			var async:Function = Async.asyncHandler(this, assertErrorHandler, 500,null,  timeOutHandler);
+			
+			service.tasks.addEventListener(ProducteevResultEvent.TASKS_LABELS, async)
+			service.tasks.labels(-1);
+		}
+		
+		[Test(async)]
+		public function testNotesView():void
+		{
+			var async:Function = Async.asyncHandler(this, noteViewHandler, 500,null,  timeOutHandler);
+			
+			service.tasks.addEventListener(ProducteevResultEvent.TASKS_NOTE_VIEW, async)
+			service.tasks.note_view(Credentials.defaultNoteId);
+		}
+		
+		private function noteViewHandler(event:ProducteevResultEvent, o:Object):void
+		{
+			assertTrue("event.success == true", event.success);
+			assertNotNull(event.data.tasks);
+			assertEquals(event.data.tasks.id_note, Credentials.defaultNoteId);
+		}
+		
+		[Test(async)]
+		public function testNotesGet():void
+		{
+			var async:Function = Async.asyncHandler(this, notesGetHandler, 500,null,  timeOutHandler);
+			
+			service.tasks.addEventListener(ProducteevResultEvent.TASKS_NOTES_GET, async)
+			service.tasks.note_get(Credentials.defaultTaskId);
+		}
+		
+		private function notesGetHandler(event:ProducteevResultEvent, o:Object):void
+		{
+			assertTrue("event.success == true", event.success);
+			assertThat(event.data.tasks, isA(Array));
+		}
+		
+		[Test(async)]
+		public function testNotesGetNonExistingTask():void
+		{
+			var async:Function = Async.asyncHandler(this, assertErrorHandler, 500,null,  timeOutHandler);
+			
+			service.tasks.addEventListener(ProducteevResultEvent.TASKS_NOTES_GET, async)
+			service.tasks.note_get(-1);
+		}
+		
+		[Test(async)]
+		public function testNoteCreateNonExistingTask():void
+		{
+			var async:Function = Async.asyncHandler(this, assertErrorHandler, 500,null,  timeOutHandler);
+			
+			service.tasks.addEventListener(ProducteevResultEvent.TASKS_NOTE_CREATE, async)
+			service.tasks.note_create("myNote", -1);
+		}
+		
+		[Ignore]
+		[Test(async)]
+		public function testNoteDeleteNonExistingTask():void
+		{
+			var async:Function = Async.asyncHandler(this, assertErrorHandler, 500,null,  timeOutHandler);
+			
+			service.tasks.addEventListener(ProducteevResultEvent.TASKS_NOTE_DELETE, async)
+			service.tasks.note_delete(-1);
+		}
+		
+		[Ignore]
+		[Test(async)]
+		public function testNonExistingActivityViewHandler():void
+		{
+			var async:Function = Async.asyncHandler(this, assertErrorHandler, 500,null,  timeOutHandler);
+			
+			service.tasks.addEventListener(ProducteevResultEvent.TASKS_ACTIVITY_VIEW, async)
+			service.tasks.activity_view(-1);
+		}
+		
+		[Ignore]
+		[Test(async)]
+		public function testShowListActivities():void
+		{
+			var async:Function = Async.asyncHandler(this, testShowListActivitiesHandler, 500,null,  timeOutHandler);
+			
+			service.tasks.addEventListener(ProducteevResultEvent.TASKS_SHOW_LIST_ACTIVITIES, async)
+			service.tasks.show_list_activities(Credentials.defaultTaskId);
+		}
+		
+		private function testShowListActivitiesHandler(event:ProducteevResultEvent, o:Object):void
+		{
+			assertTrue("event.success == true", event.success);
+			assertThat(event.data.tasks, isA(Array));
 		}
 		
 		
