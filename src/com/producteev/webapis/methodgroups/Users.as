@@ -72,6 +72,42 @@ package com.producteev.webapis.methodgroups
 	 */
 	[Event(name="usersSetDefaultDashboard", type="com.producteev.webapis.events.ProducteevResultEvent")]
 	
+	/**
+	 * Broadcast as a result of the fblogin method being called
+	 *
+	 * The event contains the following properties
+	 *	success	- Boolean indicating if the call was successful or not
+	 *	data - When success is true, contains an "users" AuthResult instance
+	 *		   When success is false, contains an "error" ProducteevError instance
+	 *
+	 * @see com.producteev.webapis.ProducteevError
+	 */
+	[Event(name="usersFBLogin", type="com.producteev.webapis.events.ProducteevResultEvent")]
+	
+	/**
+	 * Broadcast as a result of the set_facebook_id method being called
+	 *
+	 * The event contains the following properties
+	 *	success	- Boolean indicating if the call was successful or not
+	 *	data - When success is true, contains an "users" User instance
+	 *		   When success is false, contains an "error" ProducteevError instance
+	 *
+	 * @see com.producteev.webapis.ProducteevError
+	 */
+	[Event(name="usersSetFBId", type="com.producteev.webapis.events.ProducteevResultEvent")]
+	
+	/**
+	 * Broadcast as a result of the unset_facebook_id method being called
+	 *
+	 * The event contains the following properties
+	 *	success	- Boolean indicating if the call was successful or not
+	 *	data - When success is true, contains an "users" User instance
+	 *		   When success is false, contains an "error" ProducteevError instance
+	 *
+	 * @see com.producteev.webapis.ProducteevError
+	 */
+	[Event(name="usersUnsetFBId", type="com.producteev.webapis.events.ProducteevResultEvent")]
+	
 	
 	/**
 	 * Contains the methods for the User method group in the Producteev API.
@@ -79,6 +115,9 @@ package com.producteev.webapis.methodgroups
 	public class Users extends AbstractMethod
 	{
 		private static const LOGIN:String = "login";
+		private static const FBLOGIN:String = "fblogin";
+		private static const SET_FACEBOOK_ID:String = "set_facebook_id";
+		private static const UNSET_FACEBOOK_ID:String = "unset_facebook_id";
 		private static const SIGNUP:String = "signup";
 		private static const VIEW:String = "view";
 		private static const COLLEAGUES:String = "colleagues";
@@ -110,6 +149,26 @@ package com.producteev.webapis.methodgroups
 				]
 				);
 								
+		}
+		
+		/**
+		 * sign in an user using facebook    
+		 *
+		 * @param uid
+		 * @param session_key
+		 * 
+		 * @see http://code.google.com/p/producteev-api/wiki/methodsDescriptions#users/fblogin
+		 */
+		public function fblogin(uid:Number, session_key:String):void
+		{
+			call(FBLOGIN,
+				loginHandler, 
+				[
+					new NameValuePair("uid", uid),
+					new NameValuePair("session_key", session_key)
+				]
+			);
+			
 		}
 		
 		private function loginHandler(event:Event):void
@@ -170,6 +229,47 @@ package com.producteev.webapis.methodgroups
 				_resultParser.parseUser);
 		}
 		
+		/**
+		 * change facebook identifier  
+		 *
+		 * @param fb_uid  
+		 * 
+		 * @see http://code.google.com/p/producteev-api/wiki/methodsDescriptions#users/set_facebook_id
+		 */
+		public function set_facebook_id(fb_uid:int):void
+		{
+			call(SET_FACEBOOK_ID,
+				setFacebookIdHandler,
+				[new NameValuePair("fb_uid", fb_uid)]
+			);
+		}
+		
+		private function setFacebookIdHandler(event:Event):void
+		{
+			processAndDispatch(URLLoader(event.target).data,
+				ProducteevResultEvent.USERS_SET_FB_ID,
+				_resultParser.parseUser);
+		}
+		
+		/**
+		 * remove facebook identifier   
+		 *
+		 * @see http://code.google.com/p/producteev-api/wiki/methodsDescriptions#users/unset_facebook_id
+		 */
+		public function unset_facebook_id():void
+		{
+			call(UNSET_FACEBOOK_ID,
+				unsetFacebookIdHandler,
+				null
+			);
+		}
+		
+		private function unsetFacebookIdHandler(event:Event):void
+		{
+			processAndDispatch(URLLoader(event.target).data,
+				ProducteevResultEvent.USERS_UNSET_FB_ID,
+				_resultParser.parseUser);
+		}
 		
 		/**
 		 * Get a user 
