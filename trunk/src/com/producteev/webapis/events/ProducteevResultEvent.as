@@ -16,6 +16,10 @@ package com.producteev.webapis.events
 		public static const USERS_VIEW:String = "usersView";
 		public static const USERS_COLLEAGUES:String = "usersColleagues";
 		public static const USERS_SET_DEFAULT_DASHBOARD:String = "usersSetDefaultDashboard";
+		public static const USERS_FBLOGIN:String = "usersFBLogin";
+		public static const USERS_SET_FB_ID:String = "usersSetFBId";
+		public static const USERS_UNSET_FB_ID:String = "usersUnsetFBId";
+		
 		
 		/*****************************************
 		 /*     DASHBOARDS METHOD GROUP CALLS     */
