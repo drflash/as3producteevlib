@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="100%" height="100%"
+	paddingBottom="20" paddingTop="20"
+	paddingLeft="20" paddingRight="20"
+	creationComplete="vbox1_creationCompleteHandler(event)"
+	>
+	
+	<mx:Script>
+		<![CDATA[
+			import com.producteev.webapis.Task;
+			import com.producteev.webapis.client.ProducteevService;
+			import com.producteev.webapis.events.ProducteevResultEvent;
+			
+			import mx.collections.ArrayCollection;
+			import mx.events.FlexEvent;
+			
+			public var service:ProducteevService;
+			
+			[Bindable]
+			public var tasks:ArrayCollection;
+			
+			public var selectedItem:Task;
+			private var previousStatus:int;
+			
+			
+			public function getTasks(id_dashboard:int):void
+			{
+				service.tasks.addEventListener(ProducteevResultEvent.TASKS_SHOW_LIST, tasksShowListHandler);
+				service.tasks.show_list(id_dashboard);
+			}
+			
+			private function tasksShowListHandler(event:ProducteevResultEvent):void
+			{
+				if (event.success)
+				{
+					tasks = new ArrayCollection(event.data.tasks);
+				}
+			}
+
+			protected function vbox1_creationCompleteHandler(event:FlexEvent):void
+			{
+				addEventListener(StatusChangeEvent.CHANGE, statusChangeHandler, true);
+			}
+			
+			private function statusChangeHandler(e:StatusChangeEvent):void
+			{
+				selectedItem = dataGrid.selectedItem as Task;
+				previousStatus = selectedItem.status;
+				
+				service.tasks.addEventListener(ProducteevResultEvent.TASKS_SET_STATUS, setStatusHandler);
+				service.tasks.set_status(selectedItem.id_task, e.status); 
+			}
+			
+			private function setStatusHandler(event:ProducteevResultEvent):void
+			{
+				if (event.success)
+				{
+					selectedItem.status = event.data.tasks.status;
+				}
+				else
+					selectedItem.status = previousStatus;
+			}
+
+		]]>
+	</mx:Script>
+	
+	
+	<mx:DataGrid id="dataGrid" width="100%" height="100%" dataProvider="{tasks}">
+		<mx:columns>
+			<mx:DataGridColumn headerText="Status" width="55" itemRenderer="StatusRenderer" rendererIsEditor="true" dataField="status" editorDataField="status" />
+			<mx:DataGridColumn headerText="Star" width="35" dataField="star" />
+			<mx:DataGridColumn headerText="Title" dataField="title" />
+		</mx:columns>
+	</mx:DataGrid>
+	
+</mx:VBox>
