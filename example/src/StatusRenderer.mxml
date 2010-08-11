@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
+		implements="mx.controls.listClasses.IDropInListItemRenderer,mx.managers.IFocusManagerComponent"
+		verticalAlign="middle"
+		horizontalAlign="center"
+		>
+	
+	<mx:Script>
+		<![CDATA[
+			import com.producteev.webapis.Task;
+			
+			import mx.controls.dataGridClasses.DataGridItemRenderer;
+			import mx.controls.dataGridClasses.DataGridListData;
+			import mx.controls.listClasses.BaseListData;
+			import mx.controls.listClasses.ListData;
+			import mx.events.FlexEvent;
+		
+			private var _listData:DataGridListData;
+			
+			override public function drawFocus(draw:Boolean):void 
+			{
+				statusComboBox.setFocus();
+			}
+		
+			[Bindable]
+			override public function set data(value:Object):void
+			{
+				super.data = value;
+				var status:int = int(data[_listData.dataField]) - 1
+				statusComboBox.selected = Boolean(status);
+			}
+		
+			override public function get data():Object 
+			{
+				return super.data;
+			}            
+			
+			public function get listData():BaseListData
+			{
+				return _listData;
+			}
+			
+			public function set listData(value:BaseListData):void
+			{
+				_listData = DataGridListData(value);
+			}   
+			
+			private function statusComboBox_changeHandler():void
+			{
+				dispatchEvent(new StatusChangeEvent(statusComboBox.selected));
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:CheckBox id="statusComboBox"
+				change="statusComboBox_changeHandler()"
+				/>
+</mx:VBox>

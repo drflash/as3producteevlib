@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<code:SuperTabNavigator 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="100%" height="100%" 
+	xmlns:code="http://code.google.com/p/flexlib/"
+	>
+
+	<mx:Script>
+		<![CDATA[
+			import com.producteev.webapis.Dashboard;
+			import com.producteev.webapis.client.ProducteevService;
+			import com.producteev.webapis.events.ProducteevResultEvent;
+			
+			import mx.containers.Canvas;
+			
+			public var service:ProducteevService;
+			
+			public function getDashboards():void
+			{
+				service.dashboards.addEventListener(ProducteevResultEvent.DASHBOARDS_SHOW_LIST, dashboardsShowListHandler);
+				service.dashboards.show_list();
+			}
+			
+			private function dashboardsShowListHandler(event:ProducteevResultEvent):void
+			{
+				if (event.success)
+					createAndDisplayDashboards(event.data.dashboards);
+			}
+			
+			private function createAndDisplayDashboards(dashboards:Array):void
+			{
+				for each(var dashboard:Dashboard in dashboards)
+				{
+					var pod:DashboardPod = new DashboardPod();
+					pod.label = dashboard.title;
+					pod.service = service;
+					pod.getTasks(dashboard.id_dashboard);
+						
+					addChild(pod);
+				}
+			}
+		]]>
+	</mx:Script>
+
+	
+	
+	
+</code:SuperTabNavigator>
