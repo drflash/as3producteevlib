@@ -1,6 +1,7 @@
 package com.producteev.webapis.methodgroups
 {
 	import com.adobe.serialization.json.JSONDecoder;
+	import com.producteev.webapis.ProducteevError;
 	import com.producteev.webapis.client.ProducteevService;
 	import com.producteev.webapis.events.ProducteevResultEvent;
 	
@@ -117,7 +118,9 @@ package com.producteev.webapis.methodgroups
 			{
 				var e:ProducteevResultEvent = new ProducteevResultEvent(ProducteevResultEvent.USERS_LOGIN);
 				e.success = false;
-				e.data = "Wrong credentials";
+				var error:ProducteevError = new ProducteevError();
+				error.message = "Wrong login/password" 
+				e.data.error = error;
 				
 				dispatchEvent(e);
 			}
