@@ -5,7 +5,9 @@ package com.producteev.webapis.methodgroups
 	import com.producteev.webapis.producteevservice_internal;
 	
 	import flash.events.Event;
+	import flash.events.HTTPStatusEvent;
 	import flash.events.IOErrorEvent;
+	import flash.events.SecurityErrorEvent;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 
@@ -78,7 +80,6 @@ package com.producteev.webapis.methodgroups
 		{
 			var loader:URLLoader = service.producteevservice_internal::urlLoader;
 			loader.addEventListener(Event.COMPLETE, callBack);
-			
 			if (methodName == "users/login")
 				loader.addEventListener(IOErrorEvent.IO_ERROR, callBack)
 			else
@@ -86,6 +87,7 @@ package com.producteev.webapis.methodgroups
 			
 			loader.load(new URLRequest(ProducteevService.END_POINT+methodName+".xml"+query));
 		}
+		
 							 
 	}
 }

@@ -379,7 +379,14 @@ package com.producteev.webapis.methodgroups
 		 */
 		public function parseActivity(response:XML):Activity
 		{
-			return null;
+			var a:Activity = new Activity();
+			a.id_activity = parseInt(response.@id_activity);
+			a.id_creator = parseInt(response.@id_creator);
+			a.id_task = parseInt(response.@id_task);
+			a.message = response.@id_activity;
+			a.time_create = parseDate(response.@time_create);
+			
+			return a;
 		}
 		
 		private function parseDate(date:String):Date

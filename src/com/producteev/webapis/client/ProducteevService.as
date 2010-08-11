@@ -3,6 +3,7 @@ package com.producteev.webapis.client
 	import com.adobe.net.DynamicURLLoader;
 	import com.adobe.webapis.URLLoaderBase;
 	import com.producteev.webapis.events.ProducteevFaultEvent;
+	import com.producteev.webapis.methodgroups.Activities;
 	import com.producteev.webapis.methodgroups.Dashboards;
 	import com.producteev.webapis.methodgroups.Labels;
 	import com.producteev.webapis.methodgroups.MethodCaller;
@@ -15,6 +16,8 @@ package com.producteev.webapis.client
 	import flash.events.IOErrorEvent;
 	import flash.events.ProgressEvent;
 	import flash.net.URLLoader;
+	import flash.system.Security;
+	import flash.system.SecurityDomain;
 
 	/**
 	 * The Producteev class abstracts the Producteev API 
@@ -37,6 +40,8 @@ package com.producteev.webapis.client
 		
 		private var _labels:Labels;
 		
+		private var _activities:Activities;
+		
 		public function ProducteevService(apiKey:String, apiSecret:String)
 		{
 			_apiKey = apiKey;
@@ -49,6 +54,7 @@ package com.producteev.webapis.client
 			_dashboards = new Dashboards(this, methodCaller, responseParser);
 			_tasks = new Tasks(this, methodCaller, responseParser);
 			_labels = new Labels(this, methodCaller, responseParser);
+			_activities = new Activities(this, methodCaller, responseParser);
 		}
 		
 		
@@ -132,6 +138,14 @@ package com.producteev.webapis.client
 		}
 		
 		/**
+		 * Provide read-only access to the Activities method group in the Producteev API
+		 */
+		public function get activities():Activities
+		{
+			return _activities;
+		}
+		
+		/**
 		 * Dispatch an error if a method calls trigger an IOErrorEvent
 		 **/
 		public function dispatchError(event:IOErrorEvent):void
@@ -140,7 +154,6 @@ package com.producteev.webapis.client
 			e.data = event.text;
 			dispatchEvent(e);
 		}
-
 
 	}
 }

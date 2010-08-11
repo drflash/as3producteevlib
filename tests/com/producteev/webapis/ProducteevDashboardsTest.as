@@ -41,7 +41,7 @@ package com.producteev.webapis
 			var async:Function = Async.asyncHandler(this, showListHandler, 500, null, timeOutHandler);
 			
 			service.dashboards.addEventListener(ProducteevResultEvent.DASHBOARDS_SHOW_LIST, async)
-			service.dashboards.showList();
+			service.dashboards.show_list();
 		}
 		
 		private function showListHandler(e:ProducteevResultEvent, o:Object):void

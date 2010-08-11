@@ -201,7 +201,7 @@ package com.producteev.webapis.methodgroups
 		 * 
 		 * @see http://code.google.com/p/producteev-api/wiki/methodsDescriptions#dashboards/show_list
 		 */
-		public function showList(since:Date=null):void
+		public function show_list(since:Date=null):void
 		{
 			var param:Array;
 			

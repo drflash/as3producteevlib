@@ -77,6 +77,65 @@ package com.producteev.webapis
 			assertThat(e.data.labels, isA(Array));
 		}
 		
+		[Test(async)]
+		public function testView():void
+		{
+			var async:Function = Async.asyncHandler(this, viewHandler, 500,null,  timeOutHandler);
+			
+			service.labels.addEventListener(ProducteevResultEvent.LABELS_VIEW, async)
+			service.labels.view(Credentials.defaultLabelId);
+		}
+		
+		private function viewHandler(e:ProducteevResultEvent, o:Object):void
+		{
+			assertTrue("event.success == true", e.success);
+			assertThat(e.data.labels, isA(Label));
+		}
+		
+		[Ignore]
+		[Test(async)]
+		public function testDeleteNonOwnLabel():void
+		{
+			var async:Function = Async.asyncHandler(this, assertErrorHandler, 500,null,  timeOutHandler);
+			
+			service.labels.addEventListener(ProducteevResultEvent.LABELS_DELETE, async)
+			service.labels.remove(3);
+		}
+		
+		[Test(async)]
+		public function testTasks():void
+		{
+			var async:Function = Async.asyncHandler(this, tasksHandler, 500,null,  timeOutHandler);
+			
+			service.labels.addEventListener(ProducteevResultEvent.LABELS_TASKS, async)
+			service.labels.tasks(Credentials.defaultLabelId);
+		}
+		
+		private function tasksHandler(e:ProducteevResultEvent, o:Object):void
+		{
+			assertTrue("event.success == true", e.success);
+			assertThat(e.data.labels, isA(Array));
+		}
+		
+		[Test(async)]
+		public function testSetTitle():void
+		{
+			var randomTitle:String = "labelTitle"+int(Math.random()*35000);
+			var async:Function = Async.asyncHandler(this, setTitleHandler, 500,randomTitle,  timeOutHandler);
+			
+			service.labels.addEventListener(ProducteevResultEvent.LABELS_SET_TITLE, async)
+			service.labels.set_title(randomTitle, Credentials.defaultLabelId);
+		}
+		
+		private function setTitleHandler(e:ProducteevResultEvent, o:Object):void
+		{
+			assertTrue("event.success == true", e.success);
+			assertThat(e.data.labels, isA(Label));
+			assertEquals(e.data.labels.title, o);
+		}
+		
+		
+		
 		private function assertErrorHandler(e:ProducteevResultEvent, o:Object):void
 		{
 			assertFalse("event.success == false", e.success);

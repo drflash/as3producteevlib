@@ -95,6 +95,21 @@ package com.producteev.webapis
 		}
 		
 		[Test(async)]
+		public function testView():void
+		{
+			var async:Function = Async.asyncHandler(this, testViewHandler, 500,null,  timeOutHandler);
+			
+			service.tasks.addEventListener(ProducteevResultEvent.TASKS_VIEW, async)
+			service.tasks.view(Credentials.defaultTaskId);
+		}
+		
+		private function testViewHandler(e:ProducteevResultEvent, o:Object):void
+		{
+			assertTrue("event.success == true", e.success);
+			assertThat(e.data.tasks, isA(Task));
+		}
+		
+		[Test(async)]
 		public function testShowList():void
 		{
 			var async:Function = Async.asyncHandler(this, showListHandler, 500,null,  timeOutHandler);
@@ -234,17 +249,16 @@ package com.producteev.webapis
 			service.tasks.activity_view(-1);
 		}
 		
-		[Ignore]
 		[Test(async)]
-		public function testShowListActivities():void
+		public function testActivityGet():void
 		{
-			var async:Function = Async.asyncHandler(this, testShowListActivitiesHandler, 500,null,  timeOutHandler);
+			var async:Function = Async.asyncHandler(this, testActivityGetHandler, 500,null,  timeOutHandler);
 			
-			service.tasks.addEventListener(ProducteevResultEvent.TASKS_SHOW_LIST_ACTIVITIES, async)
-			service.tasks.show_list_activities(Credentials.defaultTaskId);
+			service.tasks.addEventListener(ProducteevResultEvent.TASKS_ACTIVITY_GET, async)
+			service.tasks.activities_get(Credentials.defaultTaskId);
 		}
 		
-		private function testShowListActivitiesHandler(event:ProducteevResultEvent, o:Object):void
+		private function testActivityGetHandler(event:ProducteevResultEvent, o:Object):void
 		{
 			assertTrue("event.success == true", event.success);
 			assertThat(event.data.tasks, isA(Array));

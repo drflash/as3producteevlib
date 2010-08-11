@@ -245,7 +245,7 @@ package com.producteev.webapis.methodgroups
 	 *
 	 * @see com.producteev.webapis.ProducteevError
 	 */
-	[Event(name="tasksShowListActivities", type="com.producteev.webapis.events.ProducteevResultEvent")]
+	[Event(name="tasksActivitiesGet", type="com.producteev.webapis.events.ProducteevResultEvent")]
 	
 	/**
 	 * Contains the methods for the Tasks method group in the Producteev API.
@@ -274,7 +274,7 @@ package com.producteev.webapis.methodgroups
 		private static const NOTE_CREATE:String = "note_create";
 		private static const NOTE_DELETE:String = "note_delete";
 		private static const ACTIVITY_VIEW:String = "activity_view";
-		private static const SHOW_LIST_ACTIVITIES:String = "show_list_activities";
+		private static const ACTIVITY_GET:String = "activities_get";
 		
 		public function Tasks(service:ProducteevService,
 							  methodCaller:MethodCaller,
@@ -715,26 +715,19 @@ package com.producteev.webapis.methodgroups
 		/**
 		 * get task_activities for a given task        
 		 *
-		 * @param since (optional) if not null, the function only returns 
-		 * task_activities modified or created since this date 
+		 * @param id_task 
 		 * 
-		 * @see http://code.google.com/p/producteev-api/wiki/methodsDescriptions#tasks/show_list_activities
+		 * @see http://code.google.com/p/producteev-api/wiki/methodsDescriptions#tasks/activity_get
 		 */
-		public function show_list_activities(id_task:int, since:Date=null):void
+		public function activities_get(id_task:int):void
 		{
-			var params:Array = new Array();
-			params.push(new NameValuePair("id_task", id_task));
-				
-			if (since)
-				params.push(new NameValuePair("since", DateUtil.toRFC822(since)));
-			
-			call(SHOW_LIST_ACTIVITIES, showListActivitiesHandler, params);
+			call(ACTIVITY_GET, activitiesGetHandler, [new NameValuePair("id_task", id_task)]);
 		}
 		
-		private function showListActivitiesHandler(event:Event):void
+		private function activitiesGetHandler(event:Event):void
 		{
 			processAndDispatch(URLLoader(event.target).data,
-				ProducteevResultEvent.TASKS_SHOW_LIST_ACTIVITIES,
+				ProducteevResultEvent.TASKS_ACTIVITY_GET,
 				_resultParser.parseActivities);
 		}
 		
