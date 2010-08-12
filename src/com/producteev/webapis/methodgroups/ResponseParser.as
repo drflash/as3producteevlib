@@ -269,7 +269,6 @@ package com.producteev.webapis.methodgroups
 			task.star = parseInt(response.@star);
 			task.time_created = parseDate(response.@time_created);
 			task.time_lastchange = parseDate(response.@time_lastchange);
-			task.time_public = parseDate(response.@time_public);
 			task.time_status = parseDate(response.@time_status);
 			task.title = response.@title;
 			

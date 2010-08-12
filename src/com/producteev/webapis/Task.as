@@ -28,7 +28,6 @@ package com.producteev.webapis
 		
 		public var id_creator:int;
 		public var viewed:int;
-		public var time_public:Date;
 		public var deadline:Date;
 		
 		/**
