@@ -56,7 +56,7 @@
         Compile all of the classes under the "src" tree into a .swc file
     -->
 	<target name="compile" description="Compile the SWC file">  
-         <compc output="${bin.dir}/${library.name}.swc">  
+         <compc output="${bin.dir}/${library.name}_${library.version}.swc">  
          	<compiler.library-path dir="${libs.dir}" append="true">
 				<include name="*.swc"/>
 			</compiler.library-path>
@@ -96,7 +96,7 @@
     <target name="zip" depends="compile,test,documentation">
         <zip destfile="${bin.dir}/${library.name}.zip">
         	<fileset dir="${basedir}">
-            	<include name="bin/${library.name}.swc" />
+            	<include name="bin/${library.name}_${library.version}.swc" />
             	<include name="src/**" />
             	<include name="docs/**" />
             </fileset>
