@@ -7,13 +7,14 @@
 	>
 	
 	<mx:Metadata>
-		[Event(name="logged", type="flash.events.Event")]
+		[Event(name="login", type="LoginEvent")]
 	</mx:Metadata>
 	
 	<mx:Script>
 		<![CDATA[
 			import com.producteev.webapis.AuthResult;
 			import com.producteev.webapis.ProducteevError;
+			import com.producteev.webapis.User;
 			import com.producteev.webapis.client.ProducteevService;
 			import com.producteev.webapis.events.ProducteevResultEvent;
 			
@@ -25,6 +26,7 @@
 			
 			private function login():void
 			{
+				
 				service.users.addEventListener(ProducteevResultEvent.USERS_LOGIN, loginHandler);
 				service.users.login(loginTextInput.text, passwordTextInput.text);
 			}
@@ -34,13 +36,19 @@
 				if (event.success)
 				{
 					service.token = AuthResult(event.data.users).token;
-					dispatchEvent(new Event("logged"));
+					service.users.addEventListener(ProducteevResultEvent.USERS_VIEW, userViewEvent);
+					service.users.view();
 				}
 				else
 				{
 					errorMessage = ProducteevError(event.data.error).message;
 				}
-					
+			}
+			
+			private function userViewEvent(e:ProducteevResultEvent):void
+			{
+				if (e.success)
+					dispatchEvent(new LoginEvent(e.data.users as User));
 			}
 			
 		]]>
@@ -52,12 +60,14 @@
 				<mx:TextInput 
 					id="loginTextInput" 
 					width="100%"
+					text="producteev-testuser@hotmail.fr"
 					/>
 			</mx:FormItem>
 			<mx:FormItem label="Password :" width="100%" >
 				<mx:TextInput 
 					id="passwordTextInput" 
 					displayAsPassword="true"
+					text="product33v"
 					width="100%"
 					/>
 			</mx:FormItem>

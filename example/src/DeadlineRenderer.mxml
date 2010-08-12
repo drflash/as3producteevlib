@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Label xmlns:mx="http://www.adobe.com/2006/mxml" text="{format.format(data.deadline)}">
+	
+	<mx:Script>
+		<![CDATA[
+			
+			override public function set data(value:Object):void
+			{
+				if (value)
+				{
+					if (value.deadline)
+					{
+						var today:Number = new Date().getTime();
+						
+						var deadline:Number = value.deadline.getTime();
+						
+						text = format.format(value.deadline)
+							
+						if (today > deadline)
+							setStyle("color", "red");
+						else
+							setStyle("color", "0x000000");
+					}
+					else
+					{
+						text = "";	
+					}
+				}
+			}
+		]]>
+	</mx:Script>
+	<mx:DateFormatter 
+		id="format" 
+		formatString="MM/DD/YYYY J:NN" 
+		/>
+</mx:Label>

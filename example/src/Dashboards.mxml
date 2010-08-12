@@ -8,12 +8,15 @@
 	<mx:Script>
 		<![CDATA[
 			import com.producteev.webapis.Dashboard;
+			import com.producteev.webapis.User;
 			import com.producteev.webapis.client.ProducteevService;
 			import com.producteev.webapis.events.ProducteevResultEvent;
 			
 			import mx.containers.Canvas;
 			
 			public var service:ProducteevService;
+			
+			public var user:User;
 			
 			public function getDashboards():void
 			{
@@ -35,6 +38,7 @@
 					pod.label = dashboard.title;
 					pod.service = service;
 					pod.getTasks(dashboard.id_dashboard);
+					pod.user = user;
 						
 					addChild(pod);
 				}
