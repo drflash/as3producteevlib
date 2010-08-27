@@ -69,20 +69,20 @@ package com.producteev.webapis
 			assertEquals(d.title, "test");
 		}
 		
-		/*[Test(async, order=2)]
+		[Test(async)]
 		public function testDeleteWonrgIdDashboard():void
 		{
 			var async:Function = Async.asyncHandler(this, deleteHandler, 500, timeOutHandler);
 			
 			service.dashboards.addEventListener(ProducteevResultEvent.DASHBOARDS_DELETE, async)
-			service.dashboards.delete_(1);
+			service.dashboards.remove(1);
 		}
 		
 		private function deleteHandler(e:ProducteevResultEvent, o:Object):void
 		{
 			assertFalse("event.success == false", e.success);
 			assertNotNull("event.data.error", e.data.error);
-		}*/
+		}
 		
 		[Test(async)]
 		public function testView():void
@@ -111,7 +111,7 @@ package com.producteev.webapis
 		[Test(async)]
 		public function testAccess():void
 		{
-			var async:Function = Async.asyncHandler(this, assertErrorHandler, 500, null, timeOutHandler);
+			var async:Function = Async.asyncHandler(this, testAccessHandler, 500, null, timeOutHandler);
 			
 			service.dashboards.addEventListener(ProducteevResultEvent.DASHBOARDS_ACCESS, async)
 			service.dashboards.access(Credentials.defaultDashboardId);
@@ -226,13 +226,14 @@ package com.producteev.webapis
 			service.dashboards.invite_user_by_email(Credentials.defaultDashboardId, "badformattedemail");
 		}
 		
+		[Ignore]
 		[Test(async)]
 		public function testInviteUserByEmail():void
 		{
 			var async:Function = Async.asyncHandler(this, testInviteUserByEmailHandler, 500, null, timeOutHandler);
 			
 			service.dashboards.addEventListener(ProducteevResultEvent.DASHBOARDS_INVITE_USER_BY_EMAIL, async)
-			service.dashboards.invite_user_by_email(Credentials.defaultDashboardId, "test@test.com");
+			service.dashboards.invite_user_by_email(Credentials.defaultDashboardId, "test2@test.com");
 		}
 		
 		private function testInviteUserByEmailHandler(e:ProducteevResultEvent, o:Object):void

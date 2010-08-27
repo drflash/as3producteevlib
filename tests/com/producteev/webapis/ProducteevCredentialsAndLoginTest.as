@@ -71,7 +71,7 @@ package com.producteev.webapis
 			
 			var service:ProducteevService =  new ProducteevService(Credentials.API_KEY, Credentials.API_SECRET);
 			service.users.addEventListener(ProducteevResultEvent.USERS_SIGNUP, asyncHandler);
-			service.users.signup("", "", "", "short");
+			service.users.signup("", "", "", "short", "");
 		}
 		
 		private function testTooShortPasswordHandler(event:ProducteevResultEvent, o:Object):void
@@ -87,7 +87,7 @@ package com.producteev.webapis
 			
 			var service:ProducteevService =  new ProducteevService(Credentials.API_KEY, Credentials.API_SECRET);
 			service.users.addEventListener(ProducteevResultEvent.USERS_SIGNUP, asyncHandler);
-			service.users.signup("àploa@.@", "", "", "product33v");
+			service.users.signup("àploa@.@", "", "", "product33v", "");
 		}
 		
 		private function testSignumWrongEmailHandler(event:ProducteevResultEvent, o:Object):void

@@ -110,6 +110,21 @@ package com.producteev.webapis
 			assertNotNull("error not null", e.data.error);
 		}
 		
+		[Test(async)]
+		public function testSetTimezoneNonExistingString():void
+		{
+			var async:Function = Async.asyncHandler(this, assertErrorHandler, 500, timeOutHandler);
+			
+			service.users.addEventListener(ProducteevResultEvent.USERS_SET_TIMEZONE, async)
+			service.users.setTimezone("nonExisting/Timezone");
+		}
+		
+		private function assertErrorHandler(e:ProducteevResultEvent, o:Object):void
+		{
+			assertFalse("event.success == false", e.success);
+			assertNotNull("event.data.error", e.data.error);
+		}
+		
 		private function timeOutHandler(o:Object):void
 		{
 			Assert.fail("timeout handler");

@@ -19,6 +19,7 @@ package com.producteev.webapis.events
 		public static const USERS_FBLOGIN:String = "usersFBLogin";
 		public static const USERS_SET_FB_ID:String = "usersSetFBId";
 		public static const USERS_UNSET_FB_ID:String = "usersUnsetFBId";
+		public static const USERS_SET_TIMEZONE:String = "usersSetTimezone";
 		
 		
 		/*****************************************
@@ -50,6 +51,7 @@ package com.producteev.webapis.events
 		public static const TASKS_SET_RESPONSIBLE:String = "tasksSetResponsible";
 		public static const TASKS_UNSET_RESPONSIBLE:String = "tasksUnsetResponsible";
 		public static const TASKS_SET_DEADLINE:String = "tasksSetDeadline";
+		public static const TASKS_UNSET_DEADLINE:String = "tasksUnsetDeadline";
 		public static const TASKS_SET_REMINDER:String = "tasksSetReminder";
 		public static const TASKS_DELETE:String = "tasksDelete";
 		public static const TASKS_ACCESS:String = "tasksAccess";
