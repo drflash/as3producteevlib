@@ -108,6 +108,17 @@ package com.producteev.webapis.methodgroups
 	 */
 	[Event(name="usersUnsetFBId", type="com.producteev.webapis.events.ProducteevResultEvent")]
 	
+	/**
+	 * Broadcast as a result of the set_timezone method being called
+	 *
+	 * The event contains the following properties
+	 *	success	- Boolean indicating if the call was successful or not
+	 *	data - When success is true, contains an "users" User instance
+	 *		   When success is false, contains an "error" ProducteevError instance
+	 *
+	 * @see com.producteev.webapis.ProducteevError
+	 */
+	[Event(name="usersSetTimezone", type="com.producteev.webapis.events.ProducteevResultEvent")]
 	
 	/**
 	 * Contains the methods for the User method group in the Producteev API.
@@ -122,6 +133,7 @@ package com.producteev.webapis.methodgroups
 		private static const VIEW:String = "view";
 		private static const COLLEAGUES:String = "colleagues";
 		private static const SET_DEFAULT_DASHBOARD:String = "set_default_dashboard";
+		private static const SET_TIMEZONE:String = "set_timezone";
 		
 		public function Users(service:ProducteevService, methodCaller:MethodCaller, 
 							  resultParser:ResponseParser)
@@ -200,18 +212,20 @@ package com.producteev.webapis.methodgroups
 		 * @param firstName
 		 * @param lastName
 		 * @param password
+		 * @param timezone see http://code.google.com/p/producteev-api/wiki/TimezonesList for the list of supported timezones
 		 * @param fbuid Facebook UID
 		 * 
 		 * @see http://code.google.com/p/producteev-api/wiki/methodsDescriptions#users/signup
 		 */
 		public function signup(email:String, firstName:String, lastName:String, 
-							   password:String, fbuid:Number=-1):void
+							   password:String, timezone:String, fbuid:Number=-1):void
 		{
 			var params:Array = new Array();
 			params.push(new NameValuePair("email", email));
 			params.push(new NameValuePair("firstName", firstName));
 			params.push(new NameValuePair("lastName", firstName));
 			params.push(new NameValuePair("password", password));
+			params.push(new NameValuePair("timezone", timezone));
 			
 			if (fbuid > -1)
 				params.push(new NameValuePair("fbuid", fbuid));
@@ -339,6 +353,30 @@ package com.producteev.webapis.methodgroups
 		{
 			processAndDispatch(URLLoader(event.target).data,
 				ProducteevResultEvent.USERS_SET_DEFAULT_DASHBOARD,
+				_resultParser.parseUser);
+		}
+		
+		/**
+		 * set the timezone for current user   
+		 *
+		 * @param timezone (see http://code.google.com/p/producteev-api/wiki/TimezonesList for the list of timezones)  
+		 * 
+		 * @see http://code.google.com/p/producteev-api/wiki/methodsDescriptions#users/set_timezone
+		 */
+		public function setTimezone(timezone:String):void
+		{
+			call(SET_TIMEZONE,
+				setTimezoneHandler,
+				[
+					new NameValuePair("timezone", timezone)
+				]
+			);
+		}
+		
+		private function setTimezoneHandler(event:Event):void
+		{
+			processAndDispatch(URLLoader(event.target).data,
+				ProducteevResultEvent.USERS_SET_TIMEZONE,
 				_resultParser.parseUser);
 		}
 	}

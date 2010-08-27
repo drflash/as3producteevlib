@@ -128,6 +128,18 @@ package com.producteev.webapis.methodgroups
 	[Event(name="tasksSetDeadline", type="com.producteev.webapis.events.ProducteevResultEvent")]
 	
 	/**
+	 * Broadcast as a result of the unset_deadline method being called
+	 *
+	 * The event contains the following properties
+	 *	success	- Boolean indicating if the call was successful or not
+	 *	data - When success is true, contains a "tasks" Task instance
+	 *		   When success is false, contains an "error" ProducteevError instance
+	 *
+	 * @see com.producteev.webapis.ProducteevError
+	 */
+	[Event(name="tasksUnsetDeadline", type="com.producteev.webapis.events.ProducteevResultEvent")]
+	
+	/**
 	 * Broadcast as a result of the delete method being called
 	 *
 	 * The event contains the following properties
@@ -262,6 +274,7 @@ package com.producteev.webapis.methodgroups
 		private static const SET_RESPONSIBLE:String = "set_responsible";
 		private static const UNSET_RESPONSIBLE:String = "unset_responsible";
 		private static const SET_DEADLINE:String = "set_deadline";
+		private static const UNSET_DEADLINE:String = "unset_deadline";
 		private static const SET_REMINDER:String = "set_reminder";
 		private static const DELETE:String = "delete";
 		private static const ACCESS:String = "access";
@@ -504,6 +517,28 @@ package com.producteev.webapis.methodgroups
 		{
 			processAndDispatch(URLLoader(event.target).data,
 				ProducteevResultEvent.TASKS_SET_DEADLINE,
+				_resultParser.parseTask);
+		}
+		
+		/**
+		 * set a deadline      
+		 *
+		 * @param id_task id of the task
+		 * 
+		 * @see http://code.google.com/p/producteev-api/wiki/methodsDescriptions#tasks/unset_deadline
+		 */
+		public function unset_deadline(id_task:int):void
+		{
+			var params:Array = new Array();
+			params.push(new NameValuePair("id_task", id_task));
+			
+			call(UNSET_DEADLINE, unsetDeadlineHandler, params);
+		}
+		
+		private function unsetDeadlineHandler(event:Event):void
+		{
+			processAndDispatch(URLLoader(event.target).data,
+				ProducteevResultEvent.TASKS_UNSET_DEADLINE,
 				_resultParser.parseTask);
 		}
 		

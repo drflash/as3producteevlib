@@ -7,8 +7,8 @@ package com.producteev.webapis
 		//public var producteevServiceTest:ProducteevCredentialsAndLoginTest;
 		//public var producteevUsersTest:ProducteevUsersTest;
 		//public var producteevDashboardsTest:ProducteevDashboardsTest;
-		//public var producteevTasksTest:ProducteevTasksTest;
+		public var producteevTasksTest:ProducteevTasksTest;
 		//public var producteevLabelsTest:ProducteevLabelsTest;
-		public var producteevActivitiesTest:ProducteevActivitiesTest;
+		//public var producteevActivitiesTest:ProducteevActivitiesTest;
 	}
 }

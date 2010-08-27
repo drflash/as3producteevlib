@@ -4,6 +4,8 @@ package com.producteev.webapis
 	import com.producteev.webapis.client.ProducteevService;
 	import com.producteev.webapis.events.ProducteevResultEvent;
 	
+	import flash.events.Event;
+	
 	import flexunit.framework.Assert;
 	
 	import org.flexunit.assertThat;
@@ -36,14 +38,13 @@ package com.producteev.webapis
 			service.token = authResult.token;
 		}
 		
-		[Ignore]
 		[Test(async)]
 		public function testCreate():void
 		{
 			var async:Function = Async.asyncHandler(this, createHandler, 500,null,  timeOutHandler);
 			
 			service.tasks.addEventListener(ProducteevResultEvent.TASKS_CREATE, async)
-			service.tasks.create('test', Credentials.defaultDashboardId);
+			service.tasks.create('test');
 		}
 		
 		private function createHandler(e:ProducteevResultEvent, o:Object):void
@@ -53,9 +54,9 @@ package com.producteev.webapis
 			
 			var t:Task = e.data.tasks;
 			assertEquals(t.title, "test");
+			service.tasks.remove(t.id_task);
 		}
 		
-		[Ignore]
 		[Test(async)]
 		public function testCreateDeadlineWithWrongReminder():void
 		{
@@ -63,6 +64,15 @@ package com.producteev.webapis
 			
 			service.tasks.addEventListener(ProducteevResultEvent.TASKS_CREATE, async)
 			service.tasks.create('testWrongReminder', Credentials.defaultDashboardId, -1, null, 20);
+		}
+		
+		private function testCreateDeadlineWithWringReminderHandler(e:ProducteevResultEvent, o:Object):void
+		{
+			var t:Task = e.data.tasks;
+			
+			assertTrue("event.success == true", e.success);
+			assertEquals(t.reminder, 0);
+			service.tasks.remove(t.id_task);
 		}
 		
 		[Ignore]

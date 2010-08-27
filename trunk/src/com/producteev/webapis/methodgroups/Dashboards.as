@@ -245,12 +245,12 @@ package com.producteev.webapis.methodgroups
 		 * @param id_dashboard id of the dashboard
 		 * @see http://code.google.com/p/producteev-api/wiki/methodsDescriptions#dashboards/delete
 		 */
-		public function delete_(id_dashboard:int):void
+		public function remove(id_dashboard:int):void
 		{
-			call(DELETE, deleteHandler, [new NameValuePair("id_dashboard", id_dashboard)]);
+			call(DELETE, removeHandler, [new NameValuePair("id_dashboard", id_dashboard)]);
 		}
 		
-		private function deleteHandler(event:Event):void
+		private function removeHandler(event:Event):void
 		{
 			processAndDispatch(URLLoader(event.target).data,
 				ProducteevResultEvent.DASHBOARDS_DELETE,
