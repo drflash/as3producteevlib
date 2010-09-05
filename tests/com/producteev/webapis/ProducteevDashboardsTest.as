@@ -178,7 +178,6 @@ package com.producteev.webapis
 			assertEquals(e.data.dashboards.smart_labels, 1);
 		}
 		
-		[Ignore]
 		[Test(async)]
 		public function testConfirmNonExistingDashboard():void
 		{
@@ -188,7 +187,6 @@ package com.producteev.webapis
 			service.dashboards.confirm(1);
 		}
 		
-		[Ignore]
 		[Test(async)]
 		public function testRefuseNonExistingDashboard():void
 		{
@@ -207,7 +205,6 @@ package com.producteev.webapis
 			service.dashboards.invite_user_by_id(Credentials.defaultDashboardId, -1);
 		}
 		
-		[Ignore]
 		[Test(async)]
 		public function testInviteUserByIdNonAccessibleDashboard():void
 		{
@@ -226,7 +223,6 @@ package com.producteev.webapis
 			service.dashboards.invite_user_by_email(Credentials.defaultDashboardId, "badformattedemail");
 		}
 		
-		[Ignore]
 		[Test(async)]
 		public function testInviteUserByEmail():void
 		{
