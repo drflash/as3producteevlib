@@ -85,12 +85,12 @@ package com.producteev.webapis
 			var async:Function = Async.asyncHandler(this, setDefaultDashboardHandler, 500, timeOutHandler);
 			
 			service.users.addEventListener(ProducteevResultEvent.USERS_SET_DEFAULT_DASHBOARD, async)
-			service.users.setDefaultDashboard(24046);
+			service.users.setDefaultDashboard(Credentials.defaultDashboardId);
 		}
 		
 		private function setDefaultDashboardHandler(e:ProducteevResultEvent, o:Object):void
 		{
-			assertTrue("event.success == false", e.success);
+			assertTrue("event.success == true", e.success);
 			assertThat(e.data.users, isA(User));
 		}
 		
