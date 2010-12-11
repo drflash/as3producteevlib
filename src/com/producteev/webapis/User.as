@@ -1,6 +1,5 @@
 package com.producteev.webapis
 {
-	import org.hamcrest.mxml.object.Null;
 
 	public class User
 	{
